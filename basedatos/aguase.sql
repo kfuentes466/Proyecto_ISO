@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3308
--- Tiempo de generación: 29-03-2020 a las 19:15:12
+-- Tiempo de generación: 29-03-2020 a las 20:35:32
 -- Versión del servidor: 8.0.18
 -- Versión de PHP: 7.3.12
 
@@ -29,6 +29,8 @@ USE `aguase`;
 --
 -- Estructura de tabla para la tabla `casa`
 --
+-- Creación: 29-03-2020 a las 20:23:13
+--
 
 DROP TABLE IF EXISTS `casa`;
 CREATE TABLE IF NOT EXISTS `casa` (
@@ -41,6 +43,8 @@ CREATE TABLE IF NOT EXISTS `casa` (
 
 --
 -- Estructura de tabla para la tabla `deuda`
+--
+-- Creación: 29-03-2020 a las 20:23:19
 --
 
 DROP TABLE IF EXISTS `deuda`;
@@ -56,6 +60,8 @@ CREATE TABLE IF NOT EXISTS `deuda` (
 
 --
 -- Estructura de tabla para la tabla `pago_agua`
+--
+-- Creación: 29-03-2020 a las 20:23:20
 --
 
 DROP TABLE IF EXISTS `pago_agua`;
@@ -75,6 +81,8 @@ CREATE TABLE IF NOT EXISTS `pago_agua` (
 --
 -- Estructura de tabla para la tabla `socio`
 --
+-- Creación: 29-03-2020 a las 20:23:22
+--
 
 DROP TABLE IF EXISTS `socio`;
 CREATE TABLE IF NOT EXISTS `socio` (
@@ -91,6 +99,8 @@ CREATE TABLE IF NOT EXISTS `socio` (
 
 --
 -- Estructura de tabla para la tabla `transaccion`
+--
+-- Creación: 29-03-2020 a las 20:27:38
 --
 
 DROP TABLE IF EXISTS `transaccion`;
@@ -111,6 +121,8 @@ CREATE TABLE IF NOT EXISTS `transaccion` (
 
 --
 -- Estructura de tabla para la tabla `usuarios`
+--
+-- Creación: 29-03-2020 a las 20:26:39
 --
 
 DROP TABLE IF EXISTS `usuarios`;
@@ -151,7 +163,14 @@ ALTER TABLE `socio`
 --
 ALTER TABLE `transaccion`
   ADD CONSTRAINT `transaccion_ibfk_1` FOREIGN KEY (`id_tarjeta`) REFERENCES `socio` (`id_tarjeta`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `transaccion_ibfk_2` FOREIGN KEY (`id_deuda`) REFERENCES `deuda` (`id_deuda`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `transaccion_ibfk_2` FOREIGN KEY (`id_deuda`) REFERENCES `deuda` (`id_deuda`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `transaccion_ibfk_3` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id_usuario`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `usuarios`
+--
+ALTER TABLE `usuarios`
+  ADD CONSTRAINT `usuarios_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `transaccion` (`id_usuario`) ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
