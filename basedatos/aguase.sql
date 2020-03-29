@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3308
--- Tiempo de generación: 29-03-2020 a las 05:11:59
+-- Tiempo de generación: 29-03-2020 a las 19:15:12
 -- Versión del servidor: 8.0.18
 -- Versión de PHP: 7.3.12
 
@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS `casa` (
   `id_casa` int(4) NOT NULL,
   `direccion` varchar(250) NOT NULL,
   PRIMARY KEY (`id_casa`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS `deuda` (
   `id_tarjeta` int(4) NOT NULL,
   PRIMARY KEY (`id_deuda`),
   KEY `FK_id_tarjeta` (`id_tarjeta`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -68,7 +68,7 @@ CREATE TABLE IF NOT EXISTS `pago_agua` (
   PRIMARY KEY (`id_pago`),
   KEY `FK_id_tarjeta` (`id_tarjeta`),
   KEY `FK_id_usuario` (`id_usuario`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -85,7 +85,7 @@ CREATE TABLE IF NOT EXISTS `socio` (
   `id_casa` int(4) NOT NULL,
   PRIMARY KEY (`id_tarjeta`),
   KEY `FK_id_casa` (`id_casa`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -105,7 +105,7 @@ CREATE TABLE IF NOT EXISTS `transaccion` (
   KEY `FK_id_deuda` (`id_deuda`),
   KEY `FK_id_tarjeta` (`id_tarjeta`),
   KEY `FK_id_usuario` (`id_usuario`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -121,7 +121,37 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
   `contraseña` varchar(10) NOT NULL,
   `tipo` varchar(20) NOT NULL,
   PRIMARY KEY (`id_usuario`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Restricciones para tablas volcadas
+--
+
+--
+-- Filtros para la tabla `deuda`
+--
+ALTER TABLE `deuda`
+  ADD CONSTRAINT `deuda_ibfk_1` FOREIGN KEY (`id_tarjeta`) REFERENCES `socio` (`id_tarjeta`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `pago_agua`
+--
+ALTER TABLE `pago_agua`
+  ADD CONSTRAINT `pago_agua_ibfk_1` FOREIGN KEY (`id_tarjeta`) REFERENCES `socio` (`id_tarjeta`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `pago_agua_ibfk_2` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id_usuario`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `socio`
+--
+ALTER TABLE `socio`
+  ADD CONSTRAINT `socio_ibfk_1` FOREIGN KEY (`id_casa`) REFERENCES `casa` (`id_casa`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `transaccion`
+--
+ALTER TABLE `transaccion`
+  ADD CONSTRAINT `transaccion_ibfk_1` FOREIGN KEY (`id_tarjeta`) REFERENCES `socio` (`id_tarjeta`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `transaccion_ibfk_2` FOREIGN KEY (`id_deuda`) REFERENCES `deuda` (`id_deuda`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
