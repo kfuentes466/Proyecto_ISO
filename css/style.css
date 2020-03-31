@@ -459,29 +459,46 @@ section {
 --------------------------------------------------------------*/
 .about {
   background: url("../img/about-bg.jpg") center center no-repeat;
-  background-size: cover;
-  padding: 60px 0;
-  position: relative;
+  padding: 30px;
+  margin-left: 35px;
+  position: center;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 0 29px 0 rgba(68, 88, 144, 0.12);
+  transition: all 0.3s ease-in-out;
+  border-radius: 8px;
+  z-index: 1;
 }
 
 .about::before {
-  content: '';
+   content: '';
   position: absolute;
-  left: 0;
+  background: white;
   right: 0;
-  top: 0;
+  left: 35px;
   bottom: 0;
-  background: rgba(255, 255, 255, 0.75);
-  z-index: 9;
+  top: 100%;
+  transition: all 0.3s;
+  z-index: -1;
 }
 
 .about .container {
   position: relative;
   z-index: 10;
+    margin-left: 35px;
+  font-weight: 700;
+  margin-bottom: 15px;
+  font-size: 18px;
+}
 }
 
 .about .content {
   padding: 30px 30px 30px 0;
+    margin-left: 35px;
+  font-weight: 700;
+  margin-bottom: 15px;
+  font-size: 18px;
+
 }
 
 .about .content h3 {
@@ -489,10 +506,12 @@ section {
   font-size: 34px;
   color: #2f4d5a;
   margin-bottom: 30px;
+  margin-left: 35px;
 }
 
 .about .content p {
   margin-bottom: 30px;
+  margin-left: 35px;
 }
 
 .about .content .about-btn {
@@ -583,9 +602,16 @@ section {
 
 .services .icon {
   margin-bottom: 15px;
+
+}
+img{
+  position: center;
+  margin-left: 45px;
 }
 
 .services .icon i {
+    background: linear-gradient(rgba(103, 176, 209, 0.8), rgba(103, 176, 209, 0.8)), url("../img/cta-bg.jpg") fixed center center;
+
   font-size: 48px;
   line-height: 1;
   color: #67b0d1;
@@ -593,6 +619,7 @@ section {
 }
 
 .services .title {
+  margin-left: 35px;
   font-weight: 700;
   margin-bottom: 15px;
   font-size: 18px;
