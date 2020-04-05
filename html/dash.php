@@ -1,4 +1,10 @@
 <!DOCTYPE html>
+<?php 
+ session_start();
+  if(!isset($_SESSION['usuario'])){
+    header("location:login.html");
+  }
+?>
 <html lang="en">
 
 <head>
@@ -9,7 +15,7 @@
   <meta name="keyword" content="Creative, Dashboard, Admin, Template, Theme, Bootstrap, Responsive, Retina, Minimal">
   <link rel="shortcut icon" href="img/favicon.png">
 
-  <title>Creative - Bootstrap Admin Template</title>
+  <title>Home-Eduviges</title>
 
   <!-- Bootstrap CSS -->
   <link href="../libs/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -172,7 +178,8 @@
                 <a href="#">
                                     <span class="photo"><img alt="avatar" src="../img/avatar-mini.jpg"></span>
                                     <span class="subject">
-                                    <span class="from">Greg  Martin</span>
+                                      <!-- Aqui se pondra el nombre de quien inicio la sesion -->
+                                    <span class="from"><?php $_SESSION['usuario'] ?></span>
                                     <span class="time">1 min</span>
                                     </span>
                                     <span class="message">

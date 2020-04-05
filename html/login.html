@@ -22,6 +22,44 @@
   <!-- Custom styles -->
   <link href="../css/style_login.css" rel="stylesheet">
   <link href="../css/style-responsive.css" rel="stylesheet" />
+  <script src="../js/jquery.js"></script>
+  <script>
+    $(document).ready(function(){
+      $('#entro').click(function(){
+
+        var usu = $('#usuario').val();
+        var pass = $('#contra').val();
+        if($.trim(usu).length == 0){
+          $('#usuario').focus();
+          $('#resp').html('<p style="color : red;"> Usuario vacio!</p>')
+        }
+        
+        if($.trim(pass).length == 0){
+          $('#contra').focus();
+          $('#resp').html('<p style="color : red;"> Contraseña vacia!</p>')
+        }
+        if($.trim(usu).length > 0 && $.trim(pass).length > 0){
+        $.ajax({
+          url:"../php/entrar.php",
+          method:"POST",
+          data: {usu:usu, pass:pass},
+          cache:"false",
+          beforeSend: function(){
+            $('#entro').val("Conectanto...");
+          },
+          success: function(data){
+            if(data == 1){
+              $(location).attr('href','dash.php')
+            }else{
+              $("#resp").html("<p style=' color: red;'> Credenciales incorrectas!</p>");
+              $('#entro').val("Prueba otra vez!");
+            }
+          }
+        })
+      }
+      })
+    })
+  </script>
 
   <!-- HTML5 shim and Respond.js IE8 support of HTML5 -->
   <!--[if lt IE 9]>
@@ -46,17 +84,14 @@
         <p class="login-img"><i class="icon_lock_alt"></i></p>
         <div class="input-group">
           <span class="input-group-addon"><i class="icon_profile"></i></span>
-          <input type="text" class="form-control" placeholder="Username" autofocus>
+          <input type="text" class="form-control" placeholder="Usuario" autofocus id="usuario">
         </div>
         <div class="input-group">
           <span class="input-group-addon"><i class="icon_key_alt"></i></span>
-          <input type="password" class="form-control" placeholder="Password">
+          <input type="password" class="form-control" placeholder="Contraseña" id="contra">
         </div>
-        <label class="checkbox">
-                <input type="checkbox" value="remember-me"> Remember me
-                <span class="pull-right"> <a href="#"> Forgot Password?</a></span>
-            </label>
-        <button class="btn btn-primary btn-lg btn-block" type="submit">Login</button>
+        <div id="resp"></div>
+        <input type="button" class="btn btn-primary btn-lg btn-block"  id="entro" value="Entrar"/>
       </div>
     </form>
     <div class="text-right">
