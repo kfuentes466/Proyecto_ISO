@@ -648,6 +648,7 @@ img{
 --------------------------------------------------------------*/
 .counts {
   padding-bottom: 30px;
+  height: 156px;
 }
 
 .counts .count-box {
