@@ -1,4 +1,5 @@
-﻿-- phpMyAdmin SQL Dump
+﻿
+-- phpMyAdmin SQL Dump
 -- version 4.9.2
 -- https://www.phpmyadmin.net/
 --
@@ -130,7 +131,7 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
   `id_usuario` varchar(8) NOT NULL,
   `nombre` varchar(60) NOT NULL,
   `apellido` varchar(60) NOT NULL,
-  `contraseña` varchar(10) NOT NULL,
+  `contrasena` varchar(10) NOT NULL,
   `tipo` varchar(20) NOT NULL,
   PRIMARY KEY (`id_usuario`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
