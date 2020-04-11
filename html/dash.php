@@ -178,7 +178,7 @@
                 <a href="#">
                                     <span class="photo"><img alt="avatar" src="../img/avatar-mini.jpg"></span>
                                     <span class="subject">
-                                      <!-- Aqui se pondra el nombre de quien inicio la sesion -->
+                                      
                                     <span class="from"><?php $_SESSION['usuario'] ?></span>
                                     <span class="time">1 min</span>
                                     </span>
@@ -281,7 +281,8 @@
                             <span class="profile-ava">
                                 <img alt="" src="../img/avatar1_small.jpg">
                             </span>
-                            <span class="username">Jenifer Smith</span>
+                            <!-- Aqui se pondra el nombre de quien inicio la sesion -->
+                            <span class="username"><?php echo $_SESSION['usuario']['nombre'];?></span>
                             <b class="caret"></b>
                         </a>
             <ul class="dropdown-menu extended logout">
