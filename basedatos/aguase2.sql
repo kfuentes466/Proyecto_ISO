@@ -22,8 +22,6 @@ SET time_zone = "+00:00";
 -- Base de datos: `aguase`
 --
 
-CREATE DATABASE IF NOT EXISTS `aguase` ;
-USE `aguase`;
 -- --------------------------------------------------------
 
 --
