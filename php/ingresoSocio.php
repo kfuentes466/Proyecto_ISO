@@ -15,6 +15,10 @@
         $pol = $_POST['poligono'];
 
         $ingreso = new metodos();
+        $validoSelect = "SELECT id_casa FROM casa WHERE num_casa = '$numc' AND pasaje='$pasaje' AND poligono='$pol'";
+        $validar = $ingreso->mostrar($validoSelect);
+        $cuentoValidar = mysqli_num_rows($validar);
+        if($cuentoValidar == 0){
         $espero = $ingreso->insertarCasaSocio($numc, $pasaje, $pol);
         if($espero == 1){
             $sql = "SELECT id_casa FROM casa WHERE num_casa = '$numc' AND pasaje='$pasaje' AND poligono='$pol'";
@@ -34,7 +38,10 @@
             }
         }else{
             echo "error en el primer insert";
-        }
+        }    
+    }else{
+        echo "Casa ya existente, revisar los datos!";
+    }
 
     }
 ?>

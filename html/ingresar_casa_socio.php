@@ -27,6 +27,7 @@
     <title>Document</title>
     <script>
       $(document).ready(function(){
+        var $regextel = /^[0-9]{4}(-[0-9]{4})$/;//para validar el formato del telefono
       $('#boton').click(function(){
 
         var numt = $('#numt').val();
@@ -37,16 +38,47 @@
         var pasaje = $('#pasaje').val();
         var poligono = $('#poligono').val();
 
-        if($.trim(numt).length == 0){
-          $('#usuario').focus();
-          $('#resp').html('<p style="color : red;"> Numero de tarjeta vacio!</p>')
+        if($.trim(poligono).length == 0){
+          $('#poligono').focus();
+          $('#resp').html('<p style="color : red;"> Poligono vacio!</p>')
         }
-        
+
+        if($.trim(pasaje).length == 0){
+          $('#pasaje').focus();
+          $('#resp').html('<p style="color : red;"> Pasaje vacio!</p>')
+        }
+
+        if($.trim(numc).length == 0){
+          $('#numc').focus();
+          $('#resp').html('<p style="color : red;"> Número de casa vacio!</p>')
+        }
+
+        if(!$('#telefono').val().match($regextel)){
+          $('#telefono').focus();
+          $('#resp').html('<p style="color:red;">Patron incorrecto en Telefono(patron: ####-####)!</p>')
+        }
+
+        if($.trim(apellido).length == 0){
+          $('#apellido').focus();
+          $('#resp').html('<p style="color : red;"> Apellido de tarjeta vacio!</p>')
+        }
+
         if($.trim(nombre).length == 0){
-          $('#contra').focus();
+          $('#nombre').focus();
           $('#resp').html('<p style="color : red;"> Nombre vacio!</p>')
         }
-        if($.trim(numt).length > 0 && $.trim(nombre).length > 0){
+
+        if($.trim(numt).length > 4){
+          $('#numt').focus();
+          $('#resp').html('<p style="color : red;">Numero de tarjeta no mayor a 4 digitos!</p>')
+        }
+
+        if($.trim(numt).length == 0){
+          $('#numt').focus();
+          $('#resp').html('<p style="color : red;"> Numero de tarjeta vacio!</p>')
+        }
+
+        if($.trim(numt).length > 0 && $.trim(nombre).length > 0 && $('#telefono').val().match($regextel) && $.trim(apellido).length > 0 && $.trim(numc).length > 0 && $.trim(pasaje).length > 0 && $.trim(poligono).length > 0){
         $.ajax({
           url:"../php/ingresoSocio.php",
           method:"POST",
@@ -59,8 +91,7 @@
             if(data == 1){
               $("#resp").html("<p style=' color: green;'> Ingresado correctamente !</p>");
             }else{
-              $('#resp').html(data);
-              //$("#resp").html("<p style=' color: red;'> Credenciales incorrectas!</p>");
+              $('#resp').html("<p style='color: red;'>"+data+"</p>");
               $('#boton').val("Prueba otra vez!");
             }
           }
@@ -420,7 +451,7 @@
             <form>
             <div class="form-group"> <!-- Full Name -->
                 <label for="full_name_id" class="control-label">Numero de tarjeta</label>
-                <input type="num" class="form-control" id="numt" name="numt" placeholder="####" maxlengt="4" require>
+                <input type="number" class="form-control" id="numt" name="numt" placeholder="####" maxlengt="4" require>
             </div>    
 
             <div class="form-group"> <!-- Street 1 -->
