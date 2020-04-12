@@ -24,5 +24,13 @@
             return $result;
         }
 
+        public function insertarDatosEmpleado($id,$nom,$ape){
+            $con = new conectar();
+            $conexion = $con->conexion();
+            $sql = "INSERT into usuarios(id_usuario, nombre, apellido, contrasena, tipo) VALUES('$id', '$nom', '$ape', '$id' , '2')";
+            $result = mysqli_query($conexion, $sql);
+            return $result;
+        }
+
     }
 ?>
