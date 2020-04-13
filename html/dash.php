@@ -330,7 +330,7 @@
                       </a>
           </li>
           <li class="sub-menu">
-            <a href="ingresar_casa_socio.php" class="">
+            <a href="agregar_empleado.php" class="">
                           <i class="icon_document_alt"></i>
                           <span>Ingresar </span>
                           <span class="menu-arrow arrow_carrot-right"></span>
@@ -341,7 +341,7 @@
             </ul>
           </li>
           <li class="sub-menu">
-            <a href="javascript:;" class="">
+            <a href="ingresar_casa_socio.php " class="">
                           <i class="icon_desktop"></i>
                           <span>Modificar</span>
                           <span class="menu-arrow arrow_carrot-right"></span>
