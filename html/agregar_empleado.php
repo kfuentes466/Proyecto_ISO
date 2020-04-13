@@ -350,13 +350,13 @@
         <!-- sidebar menu start-->
         <ul class="sidebar-menu">
           <li class="active">
-            <a class="" href="index.html">
+            <a class="" href="dash.php">
                           <i class="icon_house_alt"></i>
                           <span>Dashboard</span>
                       </a>
           </li>
           <li class="sub-menu">
-            <a href="javascript:;" class="">
+            <a href="agregar_empleado.php" class="">
                           <i class="icon_document_alt"></i>
                           <span>Insertar</span>
                           <span class="menu-arrow arrow_carrot-right"></span>
@@ -367,7 +367,7 @@
             </ul>
           </li>
           <li class="sub-menu">
-            <a href="javascript:;" class="">
+            <a href="ingresar_casa_socio.php" class="">
                           <i class="icon_document_alt"></i>
                           <span>Modificar</span>
                           <span class="menu-arrow arrow_carrot-right"></span>
