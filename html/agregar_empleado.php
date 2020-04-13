@@ -20,11 +20,12 @@
     <link rel="stylesheet" href="../css/fullcalendar.css">
     <link href="../css/widgets.css" rel="stylesheet">
     <link href="../css/style_login.css" rel="stylesheet">
+       <link href="../css/estilo2.css" rel="stylesheet">
     <link href="../css/style-responsive.css" rel="stylesheet" />
     <link href="../css/xcharts.min.css" rel=" stylesheet">
     <link href="../css/jquery-ui-1.10.4.min.css" rel="stylesheet">
     <script src="../js/jquery.js"></script>
-    <title>Document</title>
+    <title>Santa Eduviges</title>
     <script>
       $(document).ready(function(){
       $('#boton').click(function(){
@@ -36,22 +37,22 @@
 
         if($.trim(apellido).length == 0){
           $('#apellido').focus();
-          $('#resp').html('<p style="color : red;"> Apellido de tarjeta vacio!</p>')
+          $('#resp').html('<p style="color : white;"> Apellido de tarjeta vacio!</p>')
         }
 
         if($.trim(nombre).length == 0){
           $('#nombre').focus();
-          $('#resp').html('<p style="color : red;"> Nombre vacio!</p>')
+          $('#resp').html('<p style="color : white;"> Nombre vacio!</p>')
         }
 
         if($.trim(id).length > 8){
           $('#id').focus();
-          $('#resp').html('<p style="color : red;"> Id no puede tener mas de 8 caracteres!</p>')
+          $('#resp').html('<p style="color : white;"> Id no puede tener mas de 8 caracteres!</p>')
         }
 
         if($.trim(id).length == 0){
           $('#id').focus();
-          $('#resp').html('<p style="color : red;"> Id del empleado vacio!</p>')
+          $('#resp').html('<p style="color : white;"> Id del empleado vacio!</p>')
         }
 
         if($.trim(id).length > 0 && $.trim(nombre).length > 0 && $.trim(apellido).length > 0 && $.trim(id).length < 9){
@@ -68,7 +69,7 @@
               $("#resp").html("<p style=' color: green;'> Ingresado correctamente, Recuerda que la contraseña del empleado es el mismo Id!!</p>");
               $('input[type="text"]').val('');
             }else{
-              $('#resp').html("<p style='color: red;'>"+data+"</p>");
+              $('#resp').html("<p style='color: white;'>"+data+"</p>");
               $('#boton').val("Prueba otra vez!");
             }
           }
@@ -105,10 +106,10 @@
 
   <div class="top-nav notification-row">
     <!-- notificatoin dropdown start-->
-    <ul class="nav pull-right top-menu">
+   <!-- <ul class="nav pull-right top-menu">-->
 
-      <!-- task notificatoin start -->
-      <li id="task_notificatoin_bar" class="dropdown">
+      <!-- task notificatoin start-->
+     <!-- <li id="task_notificatoin_bar" class="dropdown">
         <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                         <i class="icon-task-l"></i>
                         <span class="badge bg-important">6</span>
@@ -190,10 +191,10 @@
             <a href="#">See All Tasks</a>
           </li>
         </ul>
-      </li>
+      </li>-->
       <!-- task notificatoin end -->
       <!-- inbox notificatoin start-->
-      <li id="mail_notificatoin_bar" class="dropdown">
+     <!-- <li id="mail_notificatoin_bar" class="dropdown">
         <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                         <i class="icon-envelope-l"></i>
                         <span class="badge bg-important">5</span>
@@ -256,10 +257,10 @@
             <a href="#">See all messages</a>
           </li>
         </ul>
-      </li>
+      </li>-->
       <!-- inbox notificatoin end -->
       <!-- alert notification start-->
-      <li id="alert_notificatoin_bar" class="dropdown">
+     <!-- <li id="alert_notificatoin_bar" class="dropdown">
         <a data-toggle="dropdown" class="dropdown-toggle" href="#">
 
                         <i class="icon-bell-l"></i>
@@ -302,7 +303,7 @@
             <a href="#">See all notifications</a>
           </li>
         </ul>
-      </li>
+      </li>-->
       <!-- alert notification end-->
       <!-- user login dropdown start-->
       <li class="dropdown">
@@ -357,53 +358,37 @@
           <li class="sub-menu">
             <a href="javascript:;" class="">
                           <i class="icon_document_alt"></i>
-                          <span>Forms</span>
+                          <span>Insertar</span>
                           <span class="menu-arrow arrow_carrot-right"></span>
                       </a>
             <ul class="sub">
-              <li><a class="" href="form_component.html">Form Elements</a></li>
-              <li><a class="" href="form_validation.html">Form Validation</a></li>
+              <li><a class="" href="ingresar_casa_socio.php">Insertar Socio</a></li>
+              <li><a class="" href="agregar_empleado.php">Insertar Empleado</a></li>
             </ul>
           </li>
           <li class="sub-menu">
             <a href="javascript:;" class="">
-                          <i class="icon_desktop"></i>
-                          <span>UI Fitures</span>
+                          <i class="icon_document_alt"></i>
+                          <span>Modificar</span>
                           <span class="menu-arrow arrow_carrot-right"></span>
                       </a>
-            <ul class="sub">
-              <li><a class="" href="general.html">Elements</a></li>
-              <li><a class="" href="buttons.html">Buttons</a></li>
-              <li><a class="" href="grids.html">Grids</a></li>
+          <ul class="sub">
+              <li><a class="" href="general.html">Modificar Empleado</a></li>
+              <li><a class="" href="buttons.html">Modificar Socio</a></li>
+             
             </ul>
-          </li>
-          <li>
-            <a class="" href="widgets.html">
-                          <i class="icon_genius"></i>
-                          <span>Widgets</span>
-                      </a>
           </li>
           <li>
             <a class="" href="chart-chartjs.html">
                           <i class="icon_piechart"></i>
-                          <span>Charts</span>
+                          <span>Graficos</span>
 
                       </a>
 
           </li>
 
-          <li class="sub-menu">
-            <a href="javascript:;" class="">
-                          <i class="icon_table"></i>
-                          <span>Tables</span>
-                          <span class="menu-arrow arrow_carrot-right"></span>
-                      </a>
-            <ul class="sub">
-              <li><a class="" href="basic_table.html">Basic Table</a></li>
-            </ul>
-          </li>
-
-          <li class="sub-menu">
+         
+         <!-- <li class="sub-menu">
             <a href="javascript:;" class="">
                           <i class="icon_documents_alt"></i>
                           <span>Pages</span>
@@ -418,14 +403,15 @@
             </ul>
           </li>
 
-        </ul>
+        </ul>-->
         <!-- sidebar menu end-->
       </div>
     </aside>
-    <section id="main-content">
+    <section id="main-content" class="main">
         <section class="wrapper">
-            <div><center><h2 style="color:red;">Ingresar Empleado</h2></center></div>
-            <form>
+            
+            <form class="register">
+              <div><center><h2 style="color:white;">Ingresar Empleado</h2></center></div>
             <div class="form-group"> <!-- Full Name -->
                 <label for="full_name_id" class="control-label">Id</label>
                 <input type="text" class="form-control" id="id" name="id" placeholder="emp01" maxlengt="8" require>
