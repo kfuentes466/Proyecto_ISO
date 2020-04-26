@@ -32,5 +32,13 @@
             return $result;
         }
 
+        public function insertarDeuda($id,$dolares){
+            $con = new conectar();
+            $conexion = $con->conexion();
+            $sql = "INSERT INTO deuda(monto, estado, id_socio) VALUES('$dolares', '1', '$id')";
+            $result = mysqli_query($conexion, $sql);
+            return $result;
+        }
+
     }
 ?>

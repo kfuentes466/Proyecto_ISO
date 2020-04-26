@@ -5,7 +5,7 @@
       
     spl_autoload_register('mi_autocargador');
 
-    if(isset($_POST['numt']) && isset($_POST['nombre']) && isset($_POST['apellido']) && isset($_POST['telefono']) && isset($_POST['numc']) && isset($_POST['pasaje']) && isset($_POST['poligono'])){
+    if(isset($_POST['numt']) && isset($_POST['nombre']) && isset($_POST['apellido']) && isset($_POST['telefono']) && isset($_POST['numc']) && isset($_POST['pasaje']) && isset($_POST['poligono']) && isset($_POST['dolares'])){
         $numt = $_POST['numt'];
         $nom = $_POST['nombre'];
         $ape = $_POST['apellido'];
@@ -13,6 +13,7 @@
         $numc = $_POST['numc'];
         $pasaje = $_POST['pasaje'];
         $pol = $_POST['poligono'];
+        $monto = $_POST['dolares'];
 
         $ingreso = new metodos();
         $validoSelect = "SELECT id_casa FROM casa WHERE num_casa = '$numc' AND pasaje='$pasaje' AND poligono='$pol'";
@@ -29,6 +30,22 @@
                 $idCasa = $data['id_casa'];
                 $ultimo = $ingreso->insertarDatosSocio($numt, $nom, $ape, $tel, $idCasa);
                 if($ultimo == 1){
+                    //echo "1";
+                    if($monto != 0){
+                        $sqlVeo= "SELECT id FROM socio WHERE num_tarjeta='$numt' AND id_casa='$idCasa'";
+                        $obtengoSocio = $ingreso->mostrar($sqlVeo);
+                        $cuentoSocio = mysqli_num_rows($obtengoSocio);
+                        if($cuentoSocio == 1){
+                            $dataSocio = mysqli_fetch_array($obtengoSocio); 
+                            $idSocio = $dataSocio['id'];
+                            $ing = $ingreso->insertarDeuda($idSocio,$monto);
+                            if($ing == 1){
+                                echo "1";
+                            }else{
+                                echo"Error al ingresar deuda!";
+                            }
+                        }
+                    }else 
                     echo "1";
                 }else{
                     echo"error en el ultimo insert";

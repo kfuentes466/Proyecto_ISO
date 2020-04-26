@@ -29,6 +29,23 @@
     <script>
       $(document).ready(function(){
         var $regextel = /^[0-9]{4}(-[0-9]{4})$/;//para validar el formato del telefono
+        var monto = "no";
+
+        $("input[type='radio']").change(function(){
+          if($(this).val()=="Si"){
+            $("#monto").show();
+            $("#No").prop("checked",false);
+            monto = "si";
+            alert(monto);
+          }
+          else{
+            $("#monto").hide(); 
+            $("#Si").prop("checked",false);
+            monto = "no";
+            alert(monto);
+          }
+        });
+
       $('#boton').click(function(){
 
         var numt = $('#numt').val();
@@ -38,6 +55,20 @@
         var numc = $('#numc').val();
         var pasaje = $('#pasaje').val();
         var poligono = $('#poligono').val();
+        var dolares = "";
+
+        if(monto == "si"){
+          dolares = $("#monto").val();
+          if($.trim(dolares).length == 0){
+            $('#monto').focus();
+            $('#resp').html('<p style="color : white;">Valor de la deuda vacio!</p>')
+          }
+
+        }
+
+        if(monto == "no"){
+          dolares = 0;
+        }
 
         if($.trim(poligono).length == 0){
           $('#poligono').focus();
@@ -78,26 +109,28 @@
           $('#numt').focus();
           $('#resp').html('<p style="color : white;"> Numero de tarjeta vacio!</p>')
         }
-
-        if($.trim(numt).length > 0 && $.trim(nombre).length > 0 && $('#telefono').val().match($regextel) && $.trim(apellido).length > 0 && $.trim(numc).length > 0 && $.trim(pasaje).length > 0 && $.trim(poligono).length > 0){
-        $.ajax({
-          url:"../php/ingresoSocio.php",
-          method:"POST",
-          data: {numt:numt, nombre:nombre , apellido:apellido, telefono:telefono, numc:numc, pasaje:pasaje, poligono:poligono},
-          cache:"false",
-          beforeSend: function(){
-            $('#boton').val("Conectanto...");
-          },
-          success: function(data){
-            if(data == 1){
-              $("#resp").html("<p style=' color: white;'> Ingresado correctamente !</p>");
-            }else{
-              $('#resp').html("<p style='color: white;'>"+data+"</p>");
-              $('#boton').val("Prueba otra vez!");
-            }
+        if(monto=="si" && $.trim(dolares).length > 0 || monto=="no" && dolares == 0){
+          if($.trim(numt).length > 0 && $.trim(nombre).length > 0 && $('#telefono').val().match($regextel) && $.trim(apellido).length > 0 && $.trim(numc).length > 0 && $.trim(pasaje).length > 0 && $.trim(poligono).length > 0){
+              $.ajax({
+              url:"../php/ingresoSocio.php",
+              method:"POST",
+              data: {numt:numt, nombre:nombre , apellido:apellido, telefono:telefono, numc:numc, pasaje:pasaje, poligono:poligono, dolares:dolares},
+              cache:"false",
+              beforeSend: function(){
+                $('#boton').val("Conectanto...");
+              },
+              success: function(data){
+                if(data == 1){
+                  $("#resp").html("<p style=' color: white;'> Ingresado correctamente !</p>");
+                }else{
+                  $('#resp').html("<p style='color: white;'>"+data+"</p>");
+                  $('#boton').val("Prueba otra vez!");
+                }
+              }
+            })
           }
-        })
-      }
+        }
+        
       })
     })
     </script>
@@ -466,7 +499,15 @@
             <div class="form-group"> <!-- Zip Code-->
                 <label for="zip_id" class="control-label">Poligono</label>
                 <input type="text" class="form-control" id="poligono" name="poligono" placeholder="ej. 3" require>
-            </div>        
+            </div>  
+
+            <div class="form-group"> <!-- Zip Code-->
+                <label for="zip_id" class="control-label">El socio tienen deuda? </label><br/>
+                <label>No</label><input type="radio" class="form-control" id="No" name="rd1" value="No" checked="checked" ><br/>
+                <label>Si</label><input type="radio" class="form-control" id="Si" name="rd2" value="Si"><br/>
+                <input type="number" class="form-control" id="monto" name="monto" step="0.01" min="1" style="display:none;" placeholder="Ingrese la deuda"><br/>
+            </div> 
+
             <div id="resp"></div>
             <div class="form-group"> <!-- Submit Button -->
                 <input type="button" value="Ingresar" class="btn btn-primary" id="boton"/>
