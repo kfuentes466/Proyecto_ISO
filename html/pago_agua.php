@@ -28,107 +28,44 @@
     <title>Santa Eduviges</title>
     <script>
       $(document).ready(function(){
-        var $regextel = /^[0-9]{4}(-[0-9]{4})$/;//para validar el formato del telefono
-        var monto = "no";
 
-        $("input[type='radio']").change(function(){
-          if($(this).val()=="Si"){
-            $("#monto").show();
-            $("#No").prop("checked",false);
-            monto = "si";
-          }
-          else{
-            $("#monto").hide(); 
-            $("#Si").prop("checked",false);
-            monto = "no";
-          }
-        });
+      $('#button-addon2').click(function(){
 
-      $('#boton').click(function(){
-
-        var numt = $('#numt').val();
-        var nombre = $('#nombre').val();
-        var apellido = $('#apellido').val();
-        var telefono = $('#telefono').val();
-        var numc = $('#numc').val();
         var pasaje = $('#pasaje').val();
         var poligono = $('#poligono').val();
-        var dolares = "";
+        var numc = $('#numc').val();
 
-        if(monto == "si"){
-          dolares = $("#monto").val();
-          if($.trim(dolares).length == 0){
-            $('#monto').focus();
-            $('#resp').html('<p style="color : white;">Valor de la deuda vacio!</p>')
-          }
-
-        }
-
-        if(monto == "no"){
-          dolares = 0;
-        }
-
-        if($.trim(poligono).length == 0){
-          $('#poligono').focus();
-          $('#resp').html('<p style="color : white;"> Poligono vacio!</p>')
-        }
-
-        if($.trim(pasaje).length == 0){
-          $('#pasaje').focus();
-          $('#resp').html('<p style="color : white;"> Pasaje vacio!</p>')
-        }
 
         if($.trim(numc).length == 0){
-          $('#numc').focus();
-          $('#resp').html('<p style="color : white;"> Número de casa vacio!</p>')
-        }
-
-        if(!$('#telefono').val().match($regextel)){
-          $('#telefono').focus();
-          $('#resp').html('<p style="color:white;">Patron incorrecto en Telefono(patron: ####-####)!</p>')
-        }
-
-        if($.trim(apellido).length == 0){
           $('#apellido').focus();
           $('#resp').html('<p style="color : white;"> Apellido de tarjeta vacio!</p>')
         }
 
-        if($.trim(nombre).length == 0){
+        if($.trim(poligono).length == 0){
           $('#nombre').focus();
           $('#resp').html('<p style="color : white;"> Nombre vacio!</p>')
         }
 
-        if($.trim(numt).length > 4){
-          $('#numt').focus();
-          $('#resp').html('<p style="color : white;">Numero de tarjeta no mayor a 4 digitos!</p>')
+        if($.trim(pasaje).length == 0){
+          $('#id').focus();
+          $('#resp').html('<p style="color : white;"> Id del empleado vacio!</p>')
         }
 
-        if($.trim(numt).length == 0){
-          $('#numt').focus();
-          $('#resp').html('<p style="color : white;"> Numero de tarjeta vacio!</p>')
-        }
-        if(monto=="si" && $.trim(dolares).length > 0 || monto=="no" && dolares == 0){
-          if($.trim(numt).length > 0 && $.trim(nombre).length > 0 && $('#telefono').val().match($regextel) && $.trim(apellido).length > 0 && $.trim(numc).length > 0 && $.trim(pasaje).length > 0 && $.trim(poligono).length > 0){
-              $.ajax({
-              url:"../php/ingresoSocio.php",
-              method:"POST",
-              data: {numt:numt, nombre:nombre , apellido:apellido, telefono:telefono, numc:numc, pasaje:pasaje, poligono:poligono, dolares:dolares},
-              cache:"false",
-              beforeSend: function(){
-                $('#boton').val("Conectanto...");
-              },
-              success: function(data){
-                if(data == 1){
-                  $("#resp").html("<p style=' color: white;'> Ingresado correctamente !</p>");
-                }else{
-                  $('#resp').html("<p style='color: white;'>"+data+"</p>");
-                  $('#boton').val("Prueba otra vez!");
-                }
-              }
-            })
+        if($.trim(pasaje).length > 0 && $.trim(poligono).length > 0 && $.trim(numc).length > 0){
+        $.ajax({
+          url:"../php/busco_casa_socio.php",
+          method:"POST",
+          data: {pasaje:pasaje, poligono:poligono , numc:numc},
+          cache:"false",
+          beforeSend: function(){
+            $('#button-addon2').val("Conectanto...");
+          },
+          success: function(data){
+              $("#quitar").remove();
+              $('#muestro').html(data);
           }
-        }
-        
+        })
+      }
       })
     })
     </script>
@@ -162,14 +99,14 @@
     <!-- notificatoin dropdown start-->
    <!-- <ul class="nav pull-right top-menu">-->
 
-      <!-- task notificatoin start -->
-    <!--  <li id="task_notificatoin_bar" class="dropdown">
+      <!-- task notificatoin start-->
+     <!-- <li id="task_notificatoin_bar" class="dropdown">
         <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                        <i class="icon-task-l"></i>-->
-                       <!-- <span class="badge bg-important">6</span>-->
+                        <i class="icon-task-l"></i>
+                        <span class="badge bg-important">6</span>
                     </a>
-      <!--  <ul class="dropdown-menu extended tasks-bar">
-        <div class="notify-arrow notify-arrow-blue"></div>
+        <ul class="dropdown-menu extended tasks-bar">
+          <div class="notify-arrow notify-arrow-blue"></div>
           <li>
             <p class="blue">You have 6 pending letter</p>
           </li>
@@ -245,8 +182,8 @@
             <a href="#">See All Tasks</a>
           </li>
         </ul>
-      </li>
-       task notificatoin end -->
+      </li>-->
+      <!-- task notificatoin end -->
       <!-- inbox notificatoin start-->
      <!-- <li id="mail_notificatoin_bar" class="dropdown">
         <a data-toggle="dropdown" class="dropdown-toggle" href="#">
@@ -314,7 +251,7 @@
       </li>-->
       <!-- inbox notificatoin end -->
       <!-- alert notification start-->
-    <!--  <li id="alert_notificatoin_bar" class="dropdown">
+     <!-- <li id="alert_notificatoin_bar" class="dropdown">
         <a data-toggle="dropdown" class="dropdown-toggle" href="#">
 
                         <i class="icon-bell-l"></i>
@@ -420,21 +357,18 @@
               <li><a class="" href="agregar_empleado.php">Insertar Empleado</a></li>
             </ul>
           </li>
-
           <li class="sub-menu">
             <a href="ingresar_casa_socio.php" class="">
                           <i class="icon_document_alt"></i>
                           <span>Modificar</span>
                           <span class="menu-arrow arrow_carrot-right"></span>
                       </a>
-            <ul class="sub">
+          <ul class="sub">
               <li><a class="" href="general.html">Modificar Empleado</a></li>
               <li><a class="" href="buttons.html">Modificar Socio</a></li>
              
             </ul>
           </li>
-          <li>
-         
           <li>
             <a class="" href="chart-chartjs.html">
                           <i class="icon_piechart"></i>
@@ -445,7 +379,13 @@
           </li>
 
          
-          <!--  <ul class="sub">
+         <!-- <li class="sub-menu">
+            <a href="javascript:;" class="">
+                          <i class="icon_documents_alt"></i>
+                          <span>Pages</span>
+                          <span class="menu-arrow arrow_carrot-right"></span>
+                      </a>
+            <ul class="sub">
               <li><a class="" href="profile.html">Profile</a></li>
               <li><a class="" href="login.html"><span>Login Page</span></a></li>
               <li><a class="" href="contact.html"><span>Contact Page</span></a></li>
@@ -457,61 +397,23 @@
         </ul>-->
         <!-- sidebar menu end-->
       </div>
-    </aside><br><br><br>
+    </aside>
     <section id="main-content" class="main">
-        <section>
-            <form class="register">
-            <div class="form-group"> 
- <div><center><h2 style="color:white; margin-top: 0.5px; ">Ingresar Socio</h2></center></div>
-              <!-- Full Name -->
-                <label for="full_name_id" class="control-label">Numero de tarjeta</label>
-                <input type="number" class="form-control" id="numt" name="numt" placeholder="####" maxlengt="4" require>
-            </div>    
-
-            <div class="form-group"> <!-- Street 1 -->
-                <label for="street1_id" class="control-label">Nombre</label>
-                <input type="text" class="form-control" id="nombre" name="nombre" placeholder="ej. Victor" require>
-            </div>                    
-                            
-            <div class="form-group"> <!-- Street 2 -->
-                <label for="street2_id" class="control-label">Apellido</label>
-                <input type="text" class="form-control" id="apellido" name="apellido" placeholder="ej. Flores " require>
-            </div>    
-
-            <div class="form-group"> <!-- City-->
-                <label for="city_id" class="control-label">Telefono</label>
-                <input type="text" class="form-control" id="telefono" name="telefono" placeholder="ej 2244-7786" require>
-            </div> 
+        <section class="wrapper">
             
-            <div><center><h2 style="color:white; font-size: 16px; margin-top: 0.5px; ">Direccion de vivienda</h2></center></div>
-            <div class="form-group"> <!-- City-->
-                <label for="city_id" class="control-label">Numero de casa</label>
-                <input type="text" class="form-control" id="numc" name="numc" placeholder="ej. 15" require>
-            </div> 
-
-            <div class="form-group"> <!-- City-->
-                <label for="city_id" class="control-label">Pasaje</label>
-                <input type="text" class="form-control" id="pasaje" name="pasaje" placeholder="ej 10" require>
-            </div> 
-
-            <div class="form-group"> <!-- Zip Code-->
-                <label for="zip_id" class="control-label">Poligono</label>
-                <input type="text" class="form-control" id="poligono" name="poligono" placeholder="ej. 3" require>
-            </div>  
-
-            <div class="form-group"> <!-- Zip Code-->
-                <label for="zip_id" class="control-label">El socio tienen deuda? </label><br/>
-                <label>No</label><input type="radio" class="form-control" id="No" name="rd1" value="No" checked="checked" ><br/>
-                <label>Si</label><input type="radio" class="form-control" id="Si" name="rd2" value="Si"><br/>
-                <input type="number" class="form-control" id="monto" name="monto" step="0.01" min="1" style="display:none;" placeholder="Ingrese la deuda"><br/>
-            </div> 
-
-            <div id="resp"></div>
-            <div class="form-group"> <!-- Submit Button -->
-                <input type="button" value="Ingresar" class="btn btn-primary" id="boton"/>
-            </div>
+            <form class="register">
+              <div><center><h2 style="color:white;">Pago agua</h2></center></div>
+              <div class="input-group ">
+                <input type="number" aria-label="Pasaje" class="form-control" placeholder="Pasaje" style="width:24%;" id="pasaje"/>
+                <input type="number" aria-labe="Poligono" class="form-control" placeholder="Poligono" style="width:24%;" id="poligono"/>
+                <input type="number" aria-label="Número casa" class="form-control" placeholder="Número casa" style="width:27%;" id="numc"/>
+                <button class="btn btn-dark btn-outline-secondary" type="button" id="button-addon2" style="">Buscar</button>
+              </div>
+              <div id="resp"></div>
             </form>                            
         </section>
+    </section>
+    <section id="muestro" class="main" style="margin-left:13%;">
     </section>
 </body>
 </html>
