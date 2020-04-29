@@ -61,5 +61,14 @@
             return $result;
         }
 
+
+        public function modificarPersonales($id,$nombre,$apellido,$contra){
+            $con = new conectar();
+            $conexion = $con->conexion();
+            $sql = "UPDATE usuarios SET nombre='$nombre', apellido='$apellido', contrasena='$contra' WHERE id_usuario='$id' ";
+            $result = mysqli_query($conexion,$sql);
+            return $result;
+        }
+
     }
 ?>

@@ -9,7 +9,7 @@ if(isset($_POST['usu']) && isset($_POST['pass'])){
       $usuario = $_POST['usu'];
       $pass = $_POST['pass'];
       $conecto = new metodos();
-      $sql = "SELECT id_usuario,nombre,apellido FROM usuarios WHERE id_usuario='".$usuario."' AND contrasena ='".$pass."'";
+      $sql = "SELECT * FROM usuarios WHERE id_usuario='".$usuario."' AND contrasena ='".$pass."'";
       $verifico = $conecto->mostrar($sql) ; 
       $cuento = mysqli_num_rows($verifico);
       if($cuento > 0){
