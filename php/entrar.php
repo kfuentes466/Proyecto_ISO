@@ -16,7 +16,9 @@ if(isset($_POST['usu']) && isset($_POST['pass'])){
         $data = mysqli_fetch_array($verifico);
         $userinfo = array();
         $userinfo['id'] = $data['id_usuario'];
-        $userinfo['nombre'] = $data['nombre'].' '. $data['apellido'];
+        $userinfo['nombre'] = $data['nombre'];
+        $userinfo["ape"]  = $data['apellido'];
+        $userinfo['contra']=$data["contrasena"];
         $_SESSION['usuario'] = $userinfo;
         //$_SESSION['usuario'] = $data['id_usuario'];
         echo "1";

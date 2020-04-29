@@ -25,6 +25,7 @@
             if($cuentoSocio == 1){
                 $dataSocio = mysqli_fetch_array($veoSocio);
                 echo '
+                <script src="../js/pago_agua.js"></script>
             <form class="register" id="quitar">
             <div class="form-group"> 
                 <div><center><h2 style="color:white; margin-top: 0.5px; ">Datos de Socio</h2></center></div>
@@ -49,7 +50,6 @@
                 //Aca tengo que poner un hidden
                 $dataDeuda = mysqli_fetch_array($veoDeuda);
                 echo '
-                <script src="../js/pago_agua.js"></script>
                 <div class="form-group"> <!-- Zip Code-->
                     <label for="zip_id" class="control-label">El socio abonara a la deuda? </label><br/>
                     <label>No</label><input type="radio" class="form-control" id="No" name="rd1" value="No" checked="checked" ><br/>
@@ -64,7 +64,7 @@
             echo '
             <div class="form-group"> <!-- Street 2 -->
                 <label for="street2_id" class="control-label">Pago del mes</label>
-                <input type="text" class="form-control" id="pago" name="apellido" placeholder="ej. Flores " require value="$2.50" disabled="true">
+                <input type="text" class="form-control" id="pago" name="apellido" placeholder="ej. Flores " require value="$7.00" disabled="true">
             </div>
 
             <div id="resp2"></div>
@@ -73,6 +73,7 @@
             </div>
             <input type="hidden" id="idSocio" value="'.$dataSocio["id"].'"/>
             <input type="hidden" id="idEmpleado" value="'.$_SESSION["usuario"]["id"].'"/>
+            <input type="hidden" id="nombres" value="'.$dataSocio["nombre"].' '.$dataSocio["apellido"].'"/>
             </form>                            
             ';
             }

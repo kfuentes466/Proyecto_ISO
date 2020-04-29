@@ -40,5 +40,26 @@
             return $result;
         }
 
+        public function insertarTransaccion($idTransaccion, $idSocio,$idDeuda,$fecha,$idEmpleado){
+            $con = new conectar();
+            $conexion = $con->conexion();
+            $sql = "";
+            if($idDeuda == 0){
+                $sql = "INSERT INTO transaccion (id_transaccion, id_socio, pago, fecha, id_usuario) VALUES('$idTransaccion', '$idSocio', '7.00', '$fecha', '$idEmpleado')";
+            }else {
+                $sql = "INSERT INTO transaccion (id_transaccion, id_socio, id_deuda,pago, fecha, id_usuario) VALUES('$idTransaccion', '$idSocio', '$idDeuda', '7.00', '$fecha', '$idEmpleado')";
+            }
+            $result = mysqli_query($conexion,$sql);
+            return $result;
+        }
+
+        public function modificarDeuda($idDeuda,$idSocio,$cambio){
+            $con = new conectar();
+            $conexion = $con->conexion();
+            $sql = "UPDATE deuda SET monto='$cambio' WHERE id_deuda='$idDeuda' AND id_socio='$idSocio'";
+            $result = mysqli_query($conexion,$sql);
+            return $result;
+        }
+
     }
 ?>
