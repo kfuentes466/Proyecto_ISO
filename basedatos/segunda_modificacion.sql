@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 28-04-2020 a las 08:27:25
+-- Tiempo de generación: 07-05-2020 a las 08:43:27
 -- Versión del servidor: 10.4.10-MariaDB
 -- Versión de PHP: 7.3.12
 
@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS `casa` (
   `pasaje` int(3) NOT NULL,
   `poligono` int(3) NOT NULL,
   PRIMARY KEY (`id_casa`)
-) ENGINE=MyISAM AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `casa`
@@ -50,7 +50,9 @@ INSERT INTO `casa` (`id_casa`, `num_casa`, `pasaje`, `poligono`) VALUES
 (11, 7, 8, 12),
 (12, 5, 9, 5),
 (13, 12, 5, 3),
-(14, 10, 8, 3);
+(14, 10, 8, 3),
+(15, 7, 7, 7),
+(16, 3, 9, 4);
 
 -- --------------------------------------------------------
 
@@ -66,14 +68,14 @@ CREATE TABLE IF NOT EXISTS `deuda` (
   `id_socio` int(11) NOT NULL,
   PRIMARY KEY (`id_deuda`),
   KEY `fk_deuda_socio` (`id_socio`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `deuda`
 --
 
 INSERT INTO `deuda` (`id_deuda`, `monto`, `estado`, `id_socio`) VALUES
-(1, 250, 1, 9);
+(1, 240, 1, 3);
 
 -- --------------------------------------------------------
 
@@ -89,24 +91,26 @@ CREATE TABLE IF NOT EXISTS `socio` (
   `apellido` varchar(60) NOT NULL,
   `telefono` varchar(9) NOT NULL,
   `id_casa` int(4) NOT NULL,
+  `activo` int(1) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_id_casa` (`id_casa`)
-) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `socio`
 --
 
-INSERT INTO `socio` (`id`, `num_tarjeta`, `nombre`, `apellido`, `telefono`, `id_casa`) VALUES
-(1, 1234, 'plis', 'hweqwe', '1234-1234', 6),
-(2, 1236, 'victor', 'Flores', '33446677', 7),
-(3, 2233, 'Vero', 'Flores', '44556677', 8),
-(4, 2235, 'Vero', 'Flores', '4455-6677', 9),
-(5, 1234, 'Ejemplo', 'Flores', '12345678', 10),
-(6, 4567, 'Carlos', 'Mendoza', '4477-8833', 11),
-(7, 1256, 'Victor', 'Flores', '7890-3456', 12),
-(8, 7805, 'Prueba', 'Deuda', '7709-5622', 13),
-(9, 7805, 'Prueba2', 'Deuda', '7709-5622', 14);
+INSERT INTO `socio` (`id`, `num_tarjeta`, `nombre`, `apellido`, `telefono`, `id_casa`, `activo`) VALUES
+(1, 1234, 'plis', 'hweqwe', '1234-1234', 6, 1),
+(2, 1236, 'victor', 'Flores', '33446677', 7, 1),
+(3, 2233, 'Vero', 'Flores', '4455-6677', 8, 1),
+(4, 2235, 'Vero', 'Flores', '4455-6689', 9, 1),
+(5, 1234, 'Ejemplo', 'Flores', '12345678', 10, 1),
+(6, 4567, 'Carlos', 'Mendoza', '4477-8833', 11, 1),
+(7, 1256, 'Victor', 'Flores', '7890-3456', 12, 1),
+(8, 0, ' ', ' ', ' ', 13, 0),
+(10, 0, ' ', ' ', ' ', 15, 0),
+(11, 5913, 'Teresa', 'Calcuta', '7788-2589', 16, 1);
 
 -- --------------------------------------------------------
 
@@ -127,6 +131,14 @@ CREATE TABLE IF NOT EXISTS `transaccion` (
   KEY `FK_id_usuario` (`id_usuario`),
   KEY `fk_transaccion_socio` (`id_socio`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `transaccion`
+--
+
+INSERT INTO `transaccion` (`id_transaccion`, `id_socio`, `id_deuda`, `pago`, `fecha`, `id_usuario`) VALUES
+('b703f2edd4452b3bba36c26202b709ad', 3, NULL, 7, '2020-04-04', 'admi'),
+('d9bdafad6fcf27f47b3a7968bfdc9539', 9, 1, 7, '2020-04-04', 'admi');
 
 -- --------------------------------------------------------
 
@@ -149,7 +161,7 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
 --
 
 INSERT INTO `usuarios` (`id_usuario`, `nombre`, `apellido`, `contrasena`, `tipo`) VALUES
-('admi', 'Admin prueba', 'admin prueba', '1234', '1'),
+('admi', 'Administrador', 'admin', '1234', '1'),
 ('emp01', 'Ejemplo', 'Funcional', 'emp01', '2'),
 ('emp02', 'Oscar', 'Fernando', 'emp02', '2'),
 ('emp03', 'Alejandra', 'Merino', 'emp03', '2'),
