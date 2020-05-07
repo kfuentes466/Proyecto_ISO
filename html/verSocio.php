@@ -23,6 +23,7 @@
     <link href="../css/style_login.css" rel="stylesheet">
        <link href="../css/estilo2.css" rel="stylesheet">
     <link href="../css/style-responsive.css" rel="stylesheet" />
+    <link href="../css/popup.css" rel="stylesheet" />
     <link href="../css/xcharts.min.css" rel=" stylesheet">
     <link href="../css/jquery-ui-1.10.4.min.css" rel="stylesheet">
     <script src="../js/jquery.js"></script>
@@ -387,7 +388,7 @@
         <section class="wrapper" style="width:80%;">
             
             <form class="register" style="width:88%;margin-left:18%;" >
-              <div><center><h2 style="color:white;">Listado de Socios</h2></center></div>
+              <div><center><h2 style="color:white;">Socios activos</h2></center></div>
               
               <div id="pagination_data">
               
@@ -396,6 +397,21 @@
             </form>                            
         </section>
     </section>
+
+    <div id="popup" style="display: none;">
+    <div class="content-popup">
+        <div class="close"><a href="#" id="close"><img src="../img/close.png"/></a></div>
+        <div>
+        	<center><h2 style="color:red;font-weight: bold;">Alerta!!</h2></center>
+            <center><h3 style="color:black;font-weight: bold;">¿Seguro que desea eleminar al socio ?</h3></center>
+            <center><h4 style="color:black;">Recuerda este cambio sera irreversible !</h4></center>
+            <div style="float:left; width:100%;">
+            <button id="borrar" type="button" class="btn btn-secondary btn-lg" style="margin-left:38%;margin-top:8%;">Aceptar</button>
+    	</div>
+        </div>
+    </div>
+</div>
+<div class="popup-overlay"></div>
 </body>
 
 

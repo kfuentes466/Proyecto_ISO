@@ -19,7 +19,7 @@
         public function insertarDatosSocio($numt, $nom, $ape, $tel, $idcasa){
             $con = new conectar();
             $conexion = $con->conexion();
-            $sql = "INSERT into socio(num_tarjeta, nombre, apellido, telefono, id_casa) VALUES('$numt', '$nom', '$ape', '$tel' , '$idcasa')";
+            $sql = "INSERT into socio(num_tarjeta, nombre, apellido, telefono, id_casa, activo) VALUES('$numt', '$nom', '$ape', '$tel' , '$idcasa','1')";
             $result = mysqli_query($conexion, $sql);
             return $result;
         }
@@ -70,5 +70,29 @@
             return $result;
         }
 
+        public function eliminarSocio($id){
+            $con = new conectar();
+            $conexion = $con->conexion();
+            $sql = "UPDATE socio SET activo='0' ,num_tarjeta='0' ,nombre=' ' ,apellido=' ' ,telefono=' '  WHERE id='$id'";
+            $result = mysqli_query($conexion,$sql);
+            return $result;
+        }
+
+        public function modificarSocio($id,$numt,$nombre,$apellido,$telefono)
+        {
+            $con = new conectar();
+            $conexion = $con->conexion();
+            $sql = "UPDATE socio SET activo='1' ,num_tarjeta='$numt' ,nombre='$nombre' ,apellido='$apellido' ,telefono='$telefono'  WHERE id='$id'";
+            $result = mysqli_query($conexion,$sql);
+            return $result;
+        }
+
+        public function eliminarDeuda($idSocio){
+            $con = new conectar();
+            $conexion = $con->conexion();
+            $sql = "DELETE FROM deuda WHERE id_socio='$idSocio'";
+            $result = mysqli_query($conexion,$sql);
+            return $result;
+        }
     }
 ?>

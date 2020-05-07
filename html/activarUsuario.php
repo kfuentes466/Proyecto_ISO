@@ -4,6 +4,19 @@
   if(!isset($_SESSION['usuario'])){
     header("location:login.html");
   }
+  $idSocio = $_GET['sshs'];
+  $anterior = $_GET['ante'];
+
+  function mi_autocargador($clase) {
+    include_once("../php/class/" . $clase . ".class.php");
+  }
+  
+ spl_autoload_register('mi_autocargador');
+
+ $mod = new metodos();
+ $sql = "SELECT num_tarjeta,nombre,apellido,telefono FROM socio WHERE id='$idSocio'";
+ $select = $mod->mostrar($sql);
+ $dataSocio = mysqli_fetch_array($select);
 ?>
 
 <html lang="en">
@@ -43,17 +56,15 @@
             monto = "no";
           }
         });
-
+       
       $('#boton').click(function(){
-
+ 
+        var idSocio = $('#idSocio').val();
         var numt = $('#numt').val();
         var nombre = $('#nombre').val();
         var apellido = $('#apellido').val();
         var telefono = $('#telefono').val();
-        var numc = $('#numc').val();
-        var pasaje = $('#pasaje').val();
-        var poligono = $('#poligono').val();
-        var dolares = "";
+        var anterior = $('#ante').val();
 
         if(monto == "si"){
           dolares = $("#monto").val();
@@ -66,21 +77,6 @@
 
         if(monto == "no"){
           dolares = 0;
-        }
-
-        if($.trim(poligono).length == 0){
-          $('#poligono').focus();
-          $('#resp').html('<p style="color : white;"> Poligono vacio!</p>')
-        }
-
-        if($.trim(pasaje).length == 0){
-          $('#pasaje').focus();
-          $('#resp').html('<p style="color : white;"> Pasaje vacio!</p>')
-        }
-
-        if($.trim(numc).length == 0){
-          $('#numc').focus();
-          $('#resp').html('<p style="color : white;"> Número de casa vacio!</p>')
         }
 
         if(!$('#telefono').val().match($regextel)){
@@ -108,29 +104,22 @@
           $('#resp').html('<p style="color : white;"> Numero de tarjeta vacio!</p>')
         }
         if(monto=="si" && $.trim(dolares).length > 0 || monto=="no" && dolares == 0){
-          if($.trim(numt).length > 0 && $.trim(nombre).length > 0 && $('#telefono').val().match($regextel) && $.trim(apellido).length > 0 && $.trim(numc).length > 0 && $.trim(pasaje).length > 0 && $.trim(poligono).length > 0){
+          if($.trim(numt).length > 0 && $.trim(nombre).length > 0 && $('#telefono').val().match($regextel) && $.trim(apellido).length > 0){
               $.ajax({
-              url:"../php/ingresoSocio.php",
+              url:"../php/modificarSocio.php",
               method:"POST",
-              data: {numt:numt, nombre:nombre , apellido:apellido, telefono:telefono, numc:numc, pasaje:pasaje, poligono:poligono, dolares:dolares},
+              data: {numt:numt, nombre:nombre , apellido:apellido, telefono:telefono, dolares:dolares, idSocio:idSocio, anterior:anterior},
               cache:"false",
               beforeSend: function(){
                 $('#boton').val("Conectanto...");
               },
               success: function(data){
-                if(data == 1){
-                  $("#resp").html("<p style=' color: white;'> Ingresado correctamente !</p>");
-                  $("#formulario")[0].reset();
-                  $('#boton').val("Ingresar");
-                }else{
-                  $('#resp').html("<p style='color: white;'>"+data+"</p>");
-                  $('#boton').val("Prueba otra vez!");
-                }
+                $('#formulario').remove();
+                $('#poner').html(data);
               }
             })
           }
-        }
-        
+        } 
       })
     })
     </script>
@@ -461,56 +450,65 @@
       </div>
     </aside><br><br><br>
     <section id="main-content" class="main">
-        <section>
+        <section id="poner">
             <form class="register" id="formulario">
             <div class="form-group"> 
- <div><center><h2 style="color:white; margin-top: 0.5px; ">Ingresar Socio</h2></center></div>
+            <?php
+                if($anterior == "verSocio.php"){
+                    $mensaje = "Modificar socio";
+                }else{
+                    $mensaje = "Asignar socio";
+                }
+              ?>
+ <div><center><h2 style="color:white; margin-top: 0.5px; "><?php echo $mensaje;?></h2></center></div>
               <!-- Full Name -->
+             
                 <label for="full_name_id" class="control-label">Numero de tarjeta</label>
-                <input type="number" class="form-control" id="numt" name="numt" placeholder="####" maxlengt="4" require>
+                <?php
+                    if($anterior == "verSocio.php"){
+                        echo '
+                        <input type="number" class="form-control" name="numt" placeholder="####" maxlengt="4" require value="'.$dataSocio['num_tarjeta'].'" disabled="true">
+                        <input type="hidden" value="'.$dataSocio["num_tarjeta"].'" id="numt">
+                        ';
+                    }else{
+                        echo'
+                        <input type="number" class="form-control" id="numt" name="numt" placeholder="####" maxlengt="4" require>
+                        ';
+                    }
+                ?>
             </div>    
 
             <div class="form-group"> 
                 <label for="street1_id" class="control-label">Nombre</label>
-                <input type="text" class="form-control" id="nombre" name="nombre" placeholder="ej. Victor" require>
+                <input type="text" class="form-control" id="nombre" name="nombre" placeholder="ej. Victor" require  value="<?php echo $dataSocio['nombre']; ?>">
             </div>                    
                             
             <div class="form-group"> 
                 <label for="street2_id" class="control-label">Apellido</label>
-                <input type="text" class="form-control" id="apellido" name="apellido" placeholder="ej. Flores " require>
+                <input type="text" class="form-control" id="apellido" name="apellido" placeholder="ej. Flores " require value="<?php echo $dataSocio['apellido']; ?>">
             </div>    
 
             <div class="form-group"> 
                 <label for="city_id" class="control-label">Telefono</label>
-                <input type="text" class="form-control" id="telefono" name="telefono" placeholder="ej 2244-7786" require>
+                <input type="text" class="form-control" id="telefono" name="telefono" placeholder="ej 2244-7786" require value="<?php echo $dataSocio['telefono']; ?>">
             </div> 
-            
-            <div><center><h2 style="color:white; font-size: 16px; margin-top: 0.5px; ">Direccion de vivienda</h2></center></div>
-            <div class="form-group"> 
-                <label for="city_id" class="control-label">Numero de casa</label>
-                <input type="text" class="form-control" id="numc" name="numc" placeholder="ej. 15" require>
-            </div> 
-
-            <div class="form-group"> 
-                <label for="city_id" class="control-label">Pasaje</label>
-                <input type="text" class="form-control" id="pasaje" name="pasaje" placeholder="ej 10" require>
-            </div> 
-
-            <div class="form-group"> 
-                <label for="zip_id" class="control-label">Poligono</label>
-                <input type="text" class="form-control" id="poligono" name="poligono" placeholder="ej. 3" require>
-            </div>  
-
-            <div class="form-group"> 
-                <label for="zip_id" class="control-label">El socio tienen deuda? </label><br/>
-                <label>No</label><input type="radio" class="form-control" id="No" name="rd1" value="No" checked="checked" ><br/>
-                <label>Si</label><input type="radio" class="form-control" id="Si" name="rd2" value="Si"><br/>
-                <input type="number" class="form-control" id="monto" name="monto" step="0.01" min="1" style="display:none;" placeholder="Ingrese la deuda"><br/>
-            </div> 
-
+            <?php
+                if($anterior == "verSocio.php"){
+                    echo '
+                    <div class="form-group"> 
+                    <label for="zip_id" class="control-label">Desea agrgar deuda? </label><br/>
+                    <label>No</label><input type="radio" class="form-control" id="No" name="rd1" value="No" checked="checked" ><br/>
+                    <label>Si</label><input type="radio" class="form-control" id="Si" name="rd2" value="Si"><br/>
+                    <input type="number" class="form-control" id="monto" name="monto" step="0.01" min="1" style="display:none;" placeholder="Ingrese la deuda"><br/>
+                </div> 
+                    ';
+                }
+            ?>
+            <input type="hidden" id="idSocio" value="<?php echo $idSocio ?>"/>
+            <input type="hidden" id="ante" value="<?php echo $anterior ?>"/>
             <div id="resp"></div>
             <div class="form-group"> <!-- Submit Button -->
-                <input type="button" value="Ingresar" class="btn btn-primary" id="boton"/>
+                <input type="button" value="modificar" class="btn btn-primary" id="boton"/>
             </div>
             </form>                            
         </section>

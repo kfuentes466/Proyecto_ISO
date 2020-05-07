@@ -22,9 +22,10 @@
     
     $start_from = ($page - 1)*$record_per_page;  
     $cont = $start_from;
-    $sql = "SELECT socio.id, socio.num_tarjeta, socio.nombre, socio.apellido, socio.telefono, casa.pasaje, casa.poligono, casa.num_casa FROM socio INNER JOIN casa ON socio.id_casa = casa.id_casa LIMIT $start_from, $record_per_page";
+    $sql = "SELECT socio.id, socio.num_tarjeta, socio.nombre, socio.apellido, socio.telefono, casa.pasaje, casa.poligono, casa.num_casa FROM socio INNER JOIN casa ON socio.id_casa = casa.id_casa WHERE socio.activo='1' LIMIT $start_from, $record_per_page";
     $result = $ver->mostrar($sql);
     $output = '';
+    $output .= '<script src="../js/pop_up.js"></script>';
     $output .= '<table class="table table-hover" id="rowcount" style="background-color:white;">
     <thead>
         <tr>
@@ -48,8 +49,8 @@
                 <td>'.$data["apellido"].'</td>
                 <td>'.$data["telefono"].'</td>
                 <td> Pasaje : '.$data["pasaje"].', Poligono : '.$data["poligono"].' , número casa : '.$data["num_casa"].'</td>
-                <td><a href="#"><span class="icon">&#xe105;</span></a></td>
-                <td><a href="#"><span class="icon">&#xe022;</span></a></td>
+                <td><a href="activarUsuario.php?sshs='.$data["id"].'&ante=verSocio.php" ><span class="icon">&#xe105;</span></a></td>
+                <td><a href="#" id = "'.$data["id"].'" class="open"><span class="icon" style="color:red;">&#xe014;</span></a></td>
                
             </tr>
         ';

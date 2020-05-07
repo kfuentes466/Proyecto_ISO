@@ -13,17 +13,20 @@
         $numc = $_POST["numc"]; 
 
         $busco = new metodos();
-        $sql = "SELECT id_casa FROM casa WHERE num_casa='$numc' AND pasaje='$pasaje' AND poligono='$poligono'";
+        $sql = "SELECT id_casa  FROM casa WHERE num_casa='$numc' AND pasaje='$pasaje' AND poligono='$poligono'";
         $veo = $busco->mostrar($sql);
         $cuento = mysqli_num_rows($veo);
         if($cuento == 1){
             $dataCasa = mysqli_fetch_array($veo);
             $idCasa = $dataCasa["id_casa"];
+            
             $sqlSocio = "SELECT * FROM socio WHERE id_casa='$idCasa'";
             $veoSocio = $busco->mostrar($sqlSocio);
             $cuentoSocio = mysqli_num_rows($veoSocio);
             if($cuentoSocio == 1){
                 $dataSocio = mysqli_fetch_array($veoSocio);
+                $act = $dataSocio["activo"];
+            if($act == 1){
                 echo '
                 <script src="../js/pago_agua.js"></script>
             <form class="register" id="quitar">
@@ -76,7 +79,15 @@
             <input type="hidden" id="nombres" value="'.$dataSocio["nombre"].' '.$dataSocio["apellido"].'"/>
             </form>                            
             ';
+            }else{
+                echo'
+                <center>
+                    <div class="alert alert-danger alert-dismissible" id="quitar" style="width:44%;">
+                        <strong>Error!</strong> Esta casa esta vacia!, si desea habilitar usuario de click <a href="activarUsuario.php?sshs='.$dataSocio["id"].'&ante=pago_agua.php">aquí</a>
+                    </div></center>
+                ';
             }
+        }
         }else{
             echo '  <center>
                     <div class="alert alert-danger alert-dismissible" id="quitar" style="width:44%;">
