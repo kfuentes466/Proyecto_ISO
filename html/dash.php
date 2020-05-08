@@ -360,7 +360,7 @@ $('#ajustes').mouseenter(function(){
                 <a href="ajustes.php"><i class="icon_profile"></i> Ajustes</a>
               </li>
               <li>
-                <a href="#"><i class="icon_key_alt"></i>Salir</a>
+                <a href="salir.php"><i class="icon_key_alt"></i>Salir</a>
               </li>
              
             </ul>
@@ -373,8 +373,49 @@ $('#ajustes').mouseenter(function(){
     <!--header end-->
 
     <!--sidebar start-->
-    <aside>
+
+                <aside>
       <div id="sidebar" class="nav-collapse ">
+    <?php 
+                  if($_SESSION["usuario"]["tipo"] == "1"){
+              ?>
+              <script type="text/javascript">
+                $('#ingresar').mouseenter(function(){
+            $("#subIngresar").show();
+          });
+
+          $('#subIngresar').mouseleave(function(){
+            $("#subIngresar").hide();
+          });
+
+ $('#vistas').mouseenter(function(){
+            $("#subvistas").show();
+          });
+
+          $('#subvistas').mouseleave(function(){
+            $("#subvistas").hide();
+          });
+
+
+
+$('#reportes').mouseenter(function(){
+            $("#subreportes").show();
+          });
+
+          $('#subreportes').mouseleave(function(){
+            $("#subreportes").hide();
+          });
+
+
+
+$('#ajustes').mouseenter(function(){
+            $("#subajustes").show();
+          });
+
+          $('#subajustes').mouseleave(function(){
+            $("#subajustes").hide();
+          });</script>
+
         <!-- sidebar menu start-->
         <ul class="sidebar-menu">
           <li class="active">
@@ -424,7 +465,51 @@ $('#ajustes').mouseenter(function(){
 
   
         <!-- sidebar menu end-->
-      </div>
+     
+              <?php
+                  }
+                   else {
+              ?>
+   
+        <!-- sidebar menu start-->
+        <ul class="sidebar-menu">
+          <li class="active">
+            <a class="" href="dash.php">
+                          <i class="icon_house_alt"></i>
+                          <span>Dashboard</span>
+                      </a>
+          </li>
+          <li class="sub-menu">
+            <a href="#" class="" id="ingresar">
+                          <i class="icon_document_alt"></i>
+                          <span>Ingresar </span>
+                          <span class="menu-arrow arrow_carrot-right"></span>
+                      </a>
+            <ul class="sub" id="subIngresar">
+              <li><a class="" href="pago_agua.php">Ingresar Pago del Agua</a></li>
+               
+            </ul>
+          </li>
+          <li class="sub-menu">
+            <a href="# "  id="vistas">
+                          <i class="icon_desktop"></i>
+                          <span>Socios</span>
+                          <span class="menu-arrow arrow_carrot-right"></span>
+                      </a>
+            <ul class="sub" id="subvistas">  
+              <li><a class="" href="verSocio.php">Socios Activos</a></li>
+      
+            </ul>
+          </li>
+         
+        
+  
+        <!-- sidebar menu end-->
+      
+    <?php
+                  }
+              ?>
+              </div>
     </aside>
     <!--sidebar end-->
 

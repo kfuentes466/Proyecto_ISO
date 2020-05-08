@@ -355,7 +355,7 @@ $('#reportes').mouseenter(function(){
                 <a href="ajustes.php"><i class="icon_profile"></i> Ajustes</a>
               </li>
               <li>
-                <a href="#"><i class="icon_key_alt"></i>Salir</a>
+                <a href="salir.php"><i class="icon_key_alt"></i>Salir</a>
               </li>
              
             </ul>
