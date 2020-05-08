@@ -14,9 +14,9 @@
         $aPagar = $_POST["monto"];
         $pagandoDeuda = $_POST["montoDeuda"];
         $tarifa = 2.50;
-        $fecha = date("Y")."/".date("m")."/".date("m");
+        $fecha = date("Y")."/".date("m")."/".date("d");
         $total =7;
-        if($aPagar < $pagandoDeuda){
+        
         $idTransaccion = md5($idSocio."-".$idEmpleado."-".$fecha );
         $pago = new metodos();
         $sql = "SELECT id_transaccion FROM transaccion WHERE id_transaccion='$idTransaccion'";
@@ -52,6 +52,7 @@
                                 </tr>
                             ';
                     if($aPagar != 0 && $pagandoDeuda != 0 && $idDeuda != 0){
+                        if($aPagar < $pagandoDeuda){
                         $cambio = ($pagandoDeuda- $aPagar);
                         $modifico = $pago->modificarDeuda($idDeuda,$idSocio,$cambio);
                         if($modifico == 1){
@@ -63,7 +64,13 @@
                             ';
                             $total = $total + $aPagar;
                         }
-                    }
+                    }else{
+                        echo '  <center>
+                        <div class="alert alert-danger alert-dismissible" id="quitar" style="width:44%;">
+                        <strong>Error!</strong> El monto del abono sobrepasa la deuda!
+                         </div></center>
+                         ';
+                }       
                     echo'
                             <tr>
                                 <th scope="row"> Total </th>
@@ -80,13 +87,8 @@
                     </div></center>
                   ';
         }
-        }else{
-            echo '  <center>
-            <div class="alert alert-danger alert-dismissible" id="quitar" style="width:44%;">
-                <strong>Error!</strong> El monto del abono sobrepasa la deuda!
-            </div></center>
-          ';
-        }
+        
         
     }
+}
 ?>

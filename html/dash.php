@@ -4,6 +4,13 @@
   if(!isset($_SESSION['usuario'])){
     header("location:login.html");
   }
+  function mi_autocargador($clase) {
+    include_once("../php/class/" . $clase . ".class.php");
+  }
+
+ spl_autoload_register('mi_autocargador');
+                 
+ $graficar = new metodos();
 ?>
 <html lang="en">
 
@@ -40,6 +47,7 @@
   <link href="../css/style-responsive.css" rel="stylesheet" />
   <link href="../css/xcharts.min.css" rel=" stylesheet">
   <link href="../css/jquery-ui-1.10.4.min.css" rel="stylesheet">
+  <script src="../libs/jquery/ploty.js"></script>
   <!-- =======================================================
     Theme Name: NiceAdmin
     Theme URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
@@ -374,40 +382,52 @@
         <!--overview start-->
         <div class="row">
           <div class="col-lg-12">
-            <h3 class="page-header"><i class="fa fa-laptop"></i> Dashboard</h3>
             <ol class="breadcrumb">
-              <li><i class="fa fa-home"></i><a href="index.html">Home</a></li>
-              <li><i class="fa fa-laptop"></i>Dashboard</li>
+              <div id="mensaje"></div>
             </ol>
           </div>
         </div>
-
+        <?php 
+          
+          $sqlCasas = "SELECT COUNT(*) AS 'Total' FROM casa";
+          $casas = $graficar->mostrar($sqlCasas);
+          $dataCasa = mysqli_fetch_array($casas);
+        ?>
         <div class="row">
           <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
             <div class="info-box blue-bg">
               <i class="fa fa-cloud-download"></i>
-              <div class="count">6.674</div>
-              <div class="title">Download</div>
+              <div class="count"><?php echo $dataCasa["Total"]; ?></div>
+              <div class="title">Casas registradas</div>
             </div>
             <!--/.info-box-->
           </div>
-          <!--/.col-->
-
+          <?php
+              $sqlSocios = "SELECT COUNT(*) AS 'Total' FROM socio ";
+              $socios = $graficar->mostrar($sqlSocios);
+              $dataSocios = mysqli_fetch_array($socios);
+          ?>
           <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
             <div class="info-box brown-bg">
               <i class="fa fa-shopping-cart"></i>
-              <div class="count">7.538</div>
-              <div class="title">Purchased</div>
+              <div class="count"><?php echo $dataSocios["Total"]; ?></div>
+              <div class="title">Socios agregados</div>
             </div>
             <!--/.info-box-->
           </div>
           <!--/.col-->
-
+          <?php
+               $fechaPrincipio = date("Y")."-".date("m")."-01";
+               $fechaFin = date("Y")."-".date("m")."-30";
+              $sqlTrans = "SELECT COUNT(*) AS 'Total' FROM transaccion WHERE fecha BETWEEN '$fechaPrincipio' AND '$fechaFin' ";
+              $trans = $graficar->mostrar($sqlTrans);
+              $dataTrans = mysqli_fetch_array($trans);
+          ?>
           <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
             <div class="info-box dark-bg">
               <i class="fa fa-thumbs-o-up"></i>
-              <div class="count">4.362</div>
-              <div class="title">Order</div>
+              <div class="count"> <?php echo $dataTrans["Total"];?> </div>
+              <div class="title">tansacciones en el mes</div>
             </div>
             <!--/.info-box-->
           </div>
@@ -432,16 +452,60 @@
 
             <div class="panel panel-default">
               <div class="panel-heading">
-                <h2><i class="fa fa-map-marker red"></i><strong>Countries</strong></h2>
+                <h2><i class="fa fa-map-marker red"></i><strong>Transacciones realizadas en <?php echo date("M")?></strong></h2>
                 <div class="panel-actions">
                   <a href="index.html#" class="btn-setting"><i class="fa fa-rotate-right"></i></a>
                   <a href="index.html#" class="btn-minimize"><i class="fa fa-chevron-up"></i></a>
                   <a href="index.html#" class="btn-close"><i class="fa fa-times"></i></a>
                 </div>
               </div>
-              <div class="panel-body-map">
-                <div id="map" style="height:380px;"></div>
-              </div>
+              
+              <?php
+               $fechaPrincipio = date("Y")."-".date("m")."-01";
+               $fechaFin = date("Y")."-".date("m")."-30";
+               $sqlTransaccion = "SELECT fecha,SUM(pago) AS Total FROM transaccion WHERE fecha BETWEEN '$fechaPrincipio' and '$fechaFin' GROUP BY fecha";
+               $graficando = $graficar->mostrar($sqlTransaccion);
+               $valoresX = array();
+               $valoresY = array();
+
+               while($corriendo = mysqli_fetch_row($graficando)){
+                  $valoresX[] = $corriendo[0];
+                  $valoresY[] = $corriendo[1];
+               }
+               $datosX = json_encode($valoresX);
+               $datosY = json_encode($valoresY);
+              ?>
+                <div id="grafica" style="height:380px;"></div>
+                <script>
+                  function CrearCadenaLineal(json){
+                    var parsed = JSON.parse(json);
+                    var arr = [];
+                    for(var x in parsed){
+                      arr.push(parsed[x]);
+                    }
+
+                    return arr;
+                  }
+
+                  var datosX = CrearCadenaLineal('<?php echo $datosX; ?>');
+                  var datosY = CrearCadenaLineal('<?php echo $datosY; ?>');
+
+
+                  var trace ={
+                    x : datosX,
+                    y : datosY,
+                    type : 'lines+markers'
+                  }
+
+                  var data = [trace];
+
+                  var layout = {
+                      title:'Transacciones Mensuales'
+                  };
+
+                  Plotly.newPlot('grafica', data, layout);
+                </script>
+              
 
             </div>
           </div>
@@ -487,148 +551,94 @@
           <div class="col-lg-9 col-md-12">
             <div class="panel panel-default">
               <div class="panel-heading">
-                <h2><i class="fa fa-flag-o red"></i><strong>Registered Users</strong></h2>
+                <h2><i class="fa fa-flag-o red"></i><strong>Información de usuarios y casas</strong></h2>
                 <div class="panel-actions">
                   <a href="index.html#" class="btn-setting"><i class="fa fa-rotate-right"></i></a>
                   <a href="index.html#" class="btn-minimize"><i class="fa fa-chevron-up"></i></a>
                   <a href="index.html#" class="btn-close"><i class="fa fa-times"></i></a>
                 </div>
               </div>
-              <div class="panel-body">
-                <table class="table bootstrap-datatable countries">
-                  <thead>
-                    <tr>
-                      <th></th>
-                      <th>Country</th>
-                      <th>Users</th>
-                      <th>Online</th>
-                      <th>Performance</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td><img src="img/Germany.png" style="height:18px; margin-top:-2px;"></td>
-                      <td>Germany</td>
-                      <td>2563</td>
-                      <td>1025</td>
-                      <td>
-                        <div class="progress thin">
-                          <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="73" aria-valuemin="0" aria-valuemax="100" style="width: 73%">
-                          </div>
-                          <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="27" aria-valuemin="0" aria-valuemax="100" style="width: 27%">
-                          </div>
-                        </div>
-                        <span class="sr-only">73%</span>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td><img src="img/India.png" style="height:18px; margin-top:-2px;"></td>
-                      <td>India</td>
-                      <td>3652</td>
-                      <td>2563</td>
-                      <td>
-                        <div class="progress thin">
-                          <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="57" aria-valuemin="0" aria-valuemax="100" style="width: 57%">
-                          </div>
-                          <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="43" aria-valuemin="0" aria-valuemax="100" style="width: 43%">
-                          </div>
-                        </div>
-                        <span class="sr-only">57%</span>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td><img src="img/Spain.png" style="height:18px; margin-top:-2px;"></td>
-                      <td>Spain</td>
-                      <td>562</td>
-                      <td>452</td>
-                      <td>
-                        <div class="progress thin">
-                          <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="93" aria-valuemin="0" aria-valuemax="100" style="width: 93%">
-                          </div>
-                          <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="7" aria-valuemin="0" aria-valuemax="100" style="width: 7%">
-                          </div>
-                        </div>
-                        <span class="sr-only">93%</span>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td><img src="img/India.png" style="height:18px; margin-top:-2px;"></td>
-                      <td>Russia</td>
-                      <td>1258</td>
-                      <td>958</td>
-                      <td>
-                        <div class="progress thin">
-                          <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
-                          </div>
-                          <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%">
-                          </div>
-                        </div>
-                        <span class="sr-only">20%</span>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td><img src="img/Spain.png" style="height:18px; margin-top:-2px;"></td>
-                      <td>USA</td>
-                      <td>4856</td>
-                      <td>3621</td>
-                      <td>
-                        <div class="progress thin">
-                          <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
-                          </div>
-                          <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%">
-                          </div>
-                        </div>
-                        <span class="sr-only">20%</span>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td><img src="img/Germany.png" style="height:18px; margin-top:-2px;"></td>
-                      <td>Brazil</td>
-                      <td>265</td>
-                      <td>102</td>
-                      <td>
-                        <div class="progress thin">
-                          <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
-                          </div>
-                          <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%">
-                          </div>
-                        </div>
-                        <span class="sr-only">20%</span>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td><img src="img/Germany.png" style="height:18px; margin-top:-2px;"></td>
-                      <td>Coloumbia</td>
-                      <td>265</td>
-                      <td>102</td>
-                      <td>
-                        <div class="progress thin">
-                          <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
-                          </div>
-                          <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%">
-                          </div>
-                        </div>
-                        <span class="sr-only">20%</span>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td><img src="img/Germany.png" style="height:18px; margin-top:-2px;"></td>
-                      <td>France</td>
-                      <td>265</td>
-                      <td>102</td>
-                      <td>
-                        <div class="progress thin">
-                          <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
-                          </div>
-                          <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%">
-                          </div>
-                        </div>
-                        <span class="sr-only">20%</span>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
+              <?php
+                $sqlCuentoAct = "SELECT COUNT(*) AS 'Total' FROM socio where activo='1'";
+                $sqlCuentoNoAct = "SELECT COUNT(*) AS 'Total' FROM socio WHERE activo='0'";
+                $noRegistrados = 800 - $dataSocios["Total"];
+                
+                $actSocio = $graficar->mostrar($sqlCuentoAct);
+                $dataAct = mysqli_fetch_array($actSocio);
+              
+
+                $noactSocio = $graficar->mostrar($sqlCuentoNoAct);
+                $datanoAct = mysqli_fetch_array($noactSocio);
+                $ValoresDonut1 = array();
+                $ValoresDonut2 = array();  
+
+                $ValoresDonut1 = [$dataAct["Total"], $datanoAct["Total"], strval($noRegistrados)];
+                
+                $casaFaltantes = $dataCasa["Total"] -1;
+
+                $valoresDonut2 = [$dataCasa["Total"], strval($casaFaltantes)];
+
+                $datosD1 = json_encode($ValoresDonut1);
+                $datosD2 = json_encode($valoresDonut2);
+              ?>
+              <div id="donuts"></div>
+              <script>
+                var datosD1 = CrearCadenaLineal('<?php echo $datosD1; ?>');
+                var datosD2 = CrearCadenaLineal('<?php echo $datosD2; ?>');
+
+                var data = [{
+                  values: datosD1,
+                  labels: ['Activos', 'No activos', 'Aprox Faltantes'],
+                  textposition: 'inside',
+                  domain: {column: 0},
+                  name: 'Socios ',
+                  hoverinfo: 'label+percent+name',
+                  hole: .4,
+                  type: 'pie'
+                  },{
+                    values : datosD2,
+                    labels : ['Registradas','No resgistradas'],
+                    text : 'Casas',
+                    textposition: 'inside',
+                    domain: {column: 1},
+                    name: 'casas',
+                    hoverinfo: 'label+percent+name',
+                    hole: .4,
+                    type: 'pie'
+                 }];
+
+                 var layout = {
+                    title: 'Información Socios y casas en el sistema',
+                    annotations: [
+                      {
+                        font: {
+                          size: 20
+                        },
+                        showarrow: false,
+                        text: 'Socios',
+                        x: 0.17,
+                        y: 0.5
+                      },
+                      {
+                        font: {
+                        size: 20
+                        },
+                        showarrow: false,
+                        text: 'Casas',
+                        x: 0.82,
+                        y: 0.5
+                      }
+                    ],
+                    height: 500,
+                    width: 750,
+                    showlegend: false,
+                    grid: {rows: 1, columns: 2}
+                  };
+
+                  Plotly.newPlot('donuts', data, layout);
+
+              </script>
+              
 
             </div>
 
@@ -1079,16 +1089,10 @@
     <script src="js/sparklines.js"></script>
     <script src="js/charts.js"></script>
     <script src="js/jquery.slimscroll.min.js"></script>
+    <script src="../js/jquery.js"></script>
     <script>
       //knob
-      $(function() {
-        $(".knob").knob({
-          'draw': function() {
-            $(this.i).val(this.cv + '%')
-          }
-        })
-      });
-
+     
       //carousel
       $(document).ready(function() {
         $("#owl-slider").owlCarousel({
@@ -1097,30 +1101,6 @@
           paginationSpeed: 400,
           singleItem: true
 
-        });
-      });
-
-      //custom select box
-
-      $(function() {
-        $('select.styled').customSelect();
-      });
-
-      /* ---------- Map ---------- */
-      $(function() {
-        $('#map').vectorMap({
-          map: 'world_mill_en',
-          series: {
-            regions: [{
-              values: gdpData,
-              scale: ['#000', '#000'],
-              normalizeFunction: 'polynomial'
-            }]
-          },
-          backgroundColor: '#eef3f7',
-          onLabelShow: function(e, el, code) {
-            el.html(el.html() + ' (GDP - ' + gdpData[code] + ')');
-          }
         });
       });
     </script>
