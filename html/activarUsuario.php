@@ -418,7 +418,7 @@ $('#ajustes').mouseenter(function(){
                       </a>
             <ul class="sub" id="subIngresar">
               <li><a class="" href="pago_agua.php">Ingresar Pago del Agua</a></li>
-                <li><a class="" href="activarUsuario.php">Ingresar Tarjeta</a></li>
+               
               <li><a class="" href="ingresar_casa_socio.php">Ingresar Socio</a></li>
               <li><a class="" href="agregar_empleado.php">Ingresar Empleado</a></li>
             </ul>
