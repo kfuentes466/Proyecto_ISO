@@ -169,7 +169,7 @@ $('#ajustes').mouseenter(function(){
   </div>
 
   <!--logo start-->
-  <a href="index.html" class="logo">Nice <span class="lite">Admin</span></a>
+ <a href="index.html" class="logo">Asociación<span class="lite">Santa Eduviges</span></a>
   <!--logo end-->
 
   <div class="nav search-row" id="top_menu">

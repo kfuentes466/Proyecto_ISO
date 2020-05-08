@@ -98,8 +98,7 @@ $('#reportes').mouseenter(function(){
   </div>
 
   <!--logo start-->
-  <a href="index.html" class="logo">Nice <span class="lite">Admin</span></a>
-  <!--logo end-->
+   <a href="index.html" class="logo">Asociación<span class="lite">Santa Eduviges</span></a>
 
   <div class="nav search-row" id="top_menu">
     <!--  search form start -->
