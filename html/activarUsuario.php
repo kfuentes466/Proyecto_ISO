@@ -436,15 +436,11 @@ $('#ajustes').mouseenter(function(){
           </li>
          
           <li>
-            <a class="" id="reportes" href="">
+            <a class="" id="reportes" href="reportes.php">
                           <i class="icon_piechart"></i>
                           <span>Reportes</span>
 
              </a>
-                  <ul class="sub" id="subreportes">  
-              <li><a class="" href="#">Socios</a></li>
-              <li><a class="" href="#">Empleados</a></li>
-            </ul>
 
 
           </li>
