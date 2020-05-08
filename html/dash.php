@@ -71,9 +71,41 @@
                   }
 
         $(document).ready(function(){
-          $('#ingresar').click(function(){
+          $('#ingresar').mouseenter(function(){
             $("#subIngresar").show();
-          })
+          });
+
+          $('#subIngresar').mouseleave(function(){
+            $("#subIngresar").hide();
+          });
+
+ $('#vistas').mouseenter(function(){
+            $("#subvistas").show();
+          });
+
+          $('#subvistas').mouseleave(function(){
+            $("#subvistas").hide();
+          });
+
+
+
+$('#reportes').mouseenter(function(){
+            $("#subreportes").show();
+          });
+
+          $('#subreportes').mouseleave(function(){
+            $("#subreportes").hide();
+          });
+
+
+
+$('#ajustes').mouseenter(function(){
+            $("#subajustes").show();
+          });
+
+          $('#subajustes').mouseleave(function(){
+            $("#subajustes").hide();
+          });
         })
   </script>
   <!-- =======================================================
@@ -314,7 +346,7 @@
           <!-- alert notification end-->
           <!-- user login dropdown start-->
           <li class="dropdown">
-            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+            <a data-toggle="dropdown" class="dropdown-toggle" href="#" id="ajustes">
                             <span class="profile-ava">
                                 <img alt="" src="../img/avatar1_small.jpg">
                             </span>
@@ -322,29 +354,15 @@
                             <span class="username"><?php echo $_SESSION['usuario']['nombre'];?></span>
                             <b class="caret"></b>
                         </a>
-            <ul class="dropdown-menu extended logout">
+            <ul class="dropdown-menu extended logout" id="subajustes">
               <div class="log-arrow-up"></div>
               <li class="eborder-top">
-                <a href="#"><i class="icon_profile"></i> My Profile</a>
+                <a href="ajustes.php"><i class="icon_profile"></i> Ajustes</a>
               </li>
               <li>
-                <a href="#"><i class="icon_mail_alt"></i> My Inbox</a>
+                <a href="#"><i class="icon_key_alt"></i>Salir</a>
               </li>
-              <li>
-                <a href="#"><i class="icon_clock_alt"></i> Timeline</a>
-              </li>
-              <li>
-                <a href="#"><i class="icon_chat_alt"></i> Chats</a>
-              </li>
-              <li>
-                <a href="login.html"><i class="icon_key_alt"></i> Log Out</a>
-              </li>
-              <li>
-                <a href="documentation.html"><i class="icon_key_alt"></i> Documentation</a>
-              </li>
-              <li>
-                <a href="documentation.html"><i class="icon_key_alt"></i> Documentation</a>
-              </li>
+             
             </ul>
           </li>
           <!-- user login dropdown end -->
@@ -372,29 +390,35 @@
                           <span class="menu-arrow arrow_carrot-right"></span>
                       </a>
             <ul class="sub" id="subIngresar">
+              <li><a class="" href="pago_agua.php">Ingresar Pago del Agua</a></li>
+                <li><a class="" href="activarUsuario.php">Ingresar Tarjeta</a></li>
               <li><a class="" href="ingresar_casa_socio.php">Ingresar Socio</a></li>
               <li><a class="" href="agregar_empleado.php">Ingresar Empleado</a></li>
             </ul>
           </li>
           <li class="sub-menu">
-            <a href="ingresar_casa_socio.php " class="">
+            <a href="# "  id="vistas">
                           <i class="icon_desktop"></i>
-                          <span>Modificar</span>
+                          <span>Socios</span>
                           <span class="menu-arrow arrow_carrot-right"></span>
                       </a>
-            <ul class="sub">
-              <li><a class="" href="general.html">Modificar</a></li>
-              <li><a class="" href="buttons.html">Modificar Socio</a></li>
-              <li><a class="" href="grids.html">Modificar Empleado</a></li>
+            <ul class="sub" id="subvistas">  
+              <li><a class="" href="verSocio.php">Socios Activos</a></li>
+              <li><a class="" href="verNoAct.php">Socios Inactivos</a></li>
             </ul>
           </li>
          
           <li>
-            <a class="" href="chart-chartjs.html">
+            <a class="" id="reportes" href="">
                           <i class="icon_piechart"></i>
-                          <span>Graficos</span>
+                          <span>Reportes</span>
 
-                      </a>
+             </a>
+                  <ul class="sub" id="subreportes">  
+              <li><a class="" href="#">Socios</a></li>
+              <li><a class="" href="#">Empleados</a></li>
+            </ul>
+
 
           </li>
 
