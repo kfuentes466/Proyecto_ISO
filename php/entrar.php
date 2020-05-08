@@ -19,6 +19,7 @@ if(isset($_POST['usu']) && isset($_POST['pass'])){
         $userinfo['nombre'] = $data['nombre'];
         $userinfo["ape"]  = $data['apellido'];
         $userinfo['contra']=$data["contrasena"];
+        $userinfo['tipo']= $data["tipo"];
         $_SESSION['usuario'] = $userinfo;
         //$_SESSION['usuario'] = $data['id_usuario'];
         echo "1";

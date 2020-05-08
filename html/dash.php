@@ -25,6 +25,7 @@
   <title>Home-Eduviges</title>
 
   <!-- Bootstrap CSS -->
+  <link href="../css/icons.min.css" rel="stylesheet">
   <link href="../libs/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <!-- bootstrap theme -->
   <link href="../libs/bootstrap/bootstrap-theme.css" rel="stylesheet">
@@ -48,6 +49,33 @@
   <link href="../css/xcharts.min.css" rel=" stylesheet">
   <link href="../css/jquery-ui-1.10.4.min.css" rel="stylesheet">
   <script src="../libs/jquery/ploty.js"></script>
+  <script src="../js/jquery.js"></script>
+
+  <style>
+    i.icon {
+    font-family: 'Glyphicons Halflings';
+    color:white;
+    font-style: normal;
+    }
+  </style>
+
+  <script>
+       function CrearCadenaLineal(json){
+                    var parsed = JSON.parse(json);
+                    var arr = [];
+                    for(var x in parsed){
+                      arr.push(parsed[x]);
+                    }
+
+                    return arr;
+                  }
+
+        $(document).ready(function(){
+          $('#ingresar').click(function(){
+            $("#subIngresar").show();
+          })
+        })
+  </script>
   <!-- =======================================================
     Theme Name: NiceAdmin
     Theme URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
@@ -338,12 +366,12 @@
                       </a>
           </li>
           <li class="sub-menu">
-            <a href="agregar_empleado.php" class="">
+            <a href="#" class="" id="ingresar">
                           <i class="icon_document_alt"></i>
                           <span>Ingresar </span>
                           <span class="menu-arrow arrow_carrot-right"></span>
                       </a>
-            <ul class="sub">
+            <ul class="sub" id="subIngresar">
               <li><a class="" href="ingresar_casa_socio.php">Ingresar Socio</a></li>
               <li><a class="" href="agregar_empleado.php">Ingresar Empleado</a></li>
             </ul>
@@ -382,9 +410,20 @@
         <!--overview start-->
         <div class="row">
           <div class="col-lg-12">
-            <ol class="breadcrumb">
-              <div id="mensaje"></div>
-            </ol>
+           
+              <div id="mensaje">
+                <?php
+                  if($_SESSION["usuario"]["id"]==$_SESSION["usuario"]["contra"]){
+                    echo '
+                    <center>
+                    <div class="alert alert-danger alert-dismissible" id="quitar" style="width:44%;">
+                        <strong>Aviso!</strong> Verifica y corrige tus datos <a href="ajustes.php">Aquí</a>
+                    </div></center>
+                    ';
+                  }
+                ?>
+              </div>
+            
           </div>
         </div>
         <?php 
@@ -395,8 +434,8 @@
         ?>
         <div class="row">
           <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-            <div class="info-box blue-bg">
-              <i class="fa fa-cloud-download"></i>
+            <div class="info-box blue-bg ">
+              <i class="icon">&#xe021;</i>
               <div class="count"><?php echo $dataCasa["Total"]; ?></div>
               <div class="title">Casas registradas</div>
             </div>
@@ -409,7 +448,7 @@
           ?>
           <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
             <div class="info-box brown-bg">
-              <i class="fa fa-shopping-cart"></i>
+              <i class="fa fa-shopping-cart icon">&#xe008;</i>
               <div class="count"><?php echo $dataSocios["Total"]; ?></div>
               <div class="title">Socios agregados</div>
             </div>
@@ -425,7 +464,7 @@
           ?>
           <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
             <div class="info-box dark-bg">
-              <i class="fa fa-thumbs-o-up"></i>
+              <i class="fa fa-thumbs-o-up icon">&#x20ac;</i>
               <div class="count"> <?php echo $dataTrans["Total"];?> </div>
               <div class="title">tansacciones en el mes</div>
             </div>
@@ -433,11 +472,16 @@
           </div>
           <!--/.col-->
 
+          <?php
+            $sqlDebe = "SELECT COUNT(*) AS 'Total' FROM deuda";
+            $muestroDebe = $graficar->mostrar($sqlDebe);
+            $dataDebe = mysqli_fetch_array($muestroDebe);
+          ?>
           <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
             <div class="info-box green-bg">
-              <i class="fa fa-cubes"></i>
-              <div class="count">1.426</div>
-              <div class="title">Stock</div>
+              <i class="fa fa-cubes icon">&#xe028;</i>
+              <div class="count"><?php echo $dataDebe["Total"]; ?></div>
+              <div class="title"># Socios con deuda</div>
             </div>
             <!--/.info-box-->
           </div>
@@ -451,16 +495,21 @@
           <div class="col-lg-9 col-md-12">
 
             <div class="panel panel-default">
+              <?php 
+                  if($_SESSION["usuario"]["tipo"] == "1"){
+              ?>
               <div class="panel-heading">
                 <h2><i class="fa fa-map-marker red"></i><strong>Transacciones realizadas en <?php echo date("M")?></strong></h2>
                 <div class="panel-actions">
-                  <a href="index.html#" class="btn-setting"><i class="fa fa-rotate-right"></i></a>
-                  <a href="index.html#" class="btn-minimize"><i class="fa fa-chevron-up"></i></a>
-                  <a href="index.html#" class="btn-close"><i class="fa fa-times"></i></a>
+                  
                 </div>
               </div>
+              <?php
+                  }
+              ?>
               
               <?php
+              
                $fechaPrincipio = date("Y")."-".date("m")."-01";
                $fechaFin = date("Y")."-".date("m")."-30";
                $sqlTransaccion = "SELECT fecha,SUM(pago) AS Total FROM transaccion WHERE fecha BETWEEN '$fechaPrincipio' and '$fechaFin' GROUP BY fecha";
@@ -474,18 +523,10 @@
                }
                $datosX = json_encode($valoresX);
                $datosY = json_encode($valoresY);
+               if($_SESSION["usuario"]["tipo"] == "1"){
               ?>
                 <div id="grafica" style="height:380px;"></div>
                 <script>
-                  function CrearCadenaLineal(json){
-                    var parsed = JSON.parse(json);
-                    var arr = [];
-                    for(var x in parsed){
-                      arr.push(parsed[x]);
-                    }
-
-                    return arr;
-                  }
 
                   var datosX = CrearCadenaLineal('<?php echo $datosX; ?>');
                   var datosY = CrearCadenaLineal('<?php echo $datosY; ?>');
@@ -517,30 +558,32 @@
                 <!-- Graph -->
                 <div><span id="todayspark1" class="spark"></span></div>
                 <!-- Text -->
-                <div class="datas-text">11,500 visitors/day</div>
-              </li>
+                <div class="datas-text" style="color:black;  font-weight: bold;">Accesos rapidos de interes </div>
+              </li><br>
               <li>
                 <div><span id="todayspark2" class="spark"></span></div>
-                <div class="datas-text">15,000 Pageviews</div>
+                <div class="datas-text">Ver Socios <a href="verSocio.php">Activos </a></div>
               </li>
               <li>
                 <div><span id="todayspark3" class="spark"></span></div>
-                <div class="datas-text">30.55% Bounce Rate</div>
-              </li>
+                <div class="datas-text">Ver Socios <a href="verNoAct.php">Inactivos</a></div>
+              </li><br>
               <li>
                 <div><span id="todayspark4" class="spark"></span></div>
-                <div class="datas-text">$16,00 Revenue/Day</div>
+                <div class="datas-text">Pago de <a href="pago_agua.php">Agua</a></div>
               </li>
               <li>
                 <div><span id="todayspark5" class="spark"></span></div>
-                <div class="datas-text">12,000000 visitors every Month</div>
+                <div class="datas-text">Visualizar Reportes <a href="reportes.php">Disponibles</a></div>
               </li>
             </ul>
           </div>
 
 
         </div>
-
+        <?php
+          }
+        ?>
 
         <!-- Today status end -->
 
@@ -553,9 +596,7 @@
               <div class="panel-heading">
                 <h2><i class="fa fa-flag-o red"></i><strong>Información de usuarios y casas</strong></h2>
                 <div class="panel-actions">
-                  <a href="index.html#" class="btn-setting"><i class="fa fa-rotate-right"></i></a>
-                  <a href="index.html#" class="btn-minimize"><i class="fa fa-chevron-up"></i></a>
-                  <a href="index.html#" class="btn-close"><i class="fa fa-times"></i></a>
+                  
                 </div>
               </div>
               <?php
@@ -574,14 +615,14 @@
 
                 $ValoresDonut1 = [$dataAct["Total"], $datanoAct["Total"], strval($noRegistrados)];
                 
-                $casaFaltantes = $dataCasa["Total"] -1;
+                $casaFaltantes = 800-$dataCasa["Total"] ;
 
                 $valoresDonut2 = [$dataCasa["Total"], strval($casaFaltantes)];
 
                 $datosD1 = json_encode($ValoresDonut1);
                 $datosD2 = json_encode($valoresDonut2);
               ?>
-              <div id="donuts"></div>
+              <div id="donuts" style="width:100%; background-color:white;"></div>
               <script>
                 var datosD1 = CrearCadenaLineal('<?php echo $datosD1; ?>');
                 var datosD2 = CrearCadenaLineal('<?php echo $datosD2; ?>');
@@ -644,405 +685,13 @@
 
           </div>
           <!--/col-->
-          <div class="col-md-3">
-
-            <div class="social-box facebook">
-              <i class="fa fa-facebook"></i>
-              <ul>
-                <li>
-                  <strong>256k</strong>
-                  <span>friends</span>
-                </li>
-                <li>
-                  <strong>359</strong>
-                  <span>feeds</span>
-                </li>
-              </ul>
-            </div>
-            <!--/social-box-->
-          </div>
-          <div class="col-md-3">
-
-            <div class="social-box google-plus">
-              <i class="fa fa-google-plus"></i>
-              <ul>
-                <li>
-                  <strong>962</strong>
-                  <span>followers</span>
-                </li>
-                <li>
-                  <strong>256</strong>
-                  <span>circles</span>
-                </li>
-              </ul>
-            </div>
-            <!--/social-box-->
-
-          </div>
-          <!--/col-->
-          <div class="col-md-3">
-
-            <div class="social-box twitter">
-              <i class="fa fa-twitter"></i>
-              <ul>
-                <li>
-                  <strong>1562k</strong>
-                  <span>followers</span>
-                </li>
-                <li>
-                  <strong>2562</strong>
-                  <span>tweets</span>
-                </li>
-              </ul>
-            </div>
-            <!--/social-box-->
-
-          </div>
           <!--/col-->
 
         </div>
-
-
-
-        <!-- statics end -->
-
-
-
-
-        <!-- project team & activity start -->
-        <div class="row">
-          <div class="col-md-4 portlets">
-            <!-- Widget -->
-            <div class="panel panel-default">
-              <div class="panel-heading">
-                <div class="pull-left">Message</div>
-                <div class="widget-icons pull-right">
-                  <a href="#" class="wminimize"><i class="fa fa-chevron-up"></i></a>
-                  <a href="#" class="wclose"><i class="fa fa-times"></i></a>
-                </div>
-                <div class="clearfix"></div>
-              </div>
-
-              <div class="panel-body">
-                <!-- Widget content -->
-                <div class="padd sscroll">
-
-                  <ul class="chats">
-
-                    <!-- Chat by us. Use the class "by-me". -->
-                    <li class="by-me">
-                      <!-- Use the class "pull-left" in avatar -->
-                      <div class="avatar pull-left">
-                        <img src="img/user.jpg" alt="" />
-                      </div>
-
-                      <div class="chat-content">
-                        <!-- In meta area, first include "name" and then "time" -->
-                        <div class="chat-meta">John Smith <span class="pull-right">3 hours ago</span></div>
-                        Vivamus diam elit diam, consectetur dapibus adipiscing elit.
-                        <div class="clearfix"></div>
-                      </div>
-                    </li>
-
-                    <!-- Chat by other. Use the class "by-other". -->
-                    <li class="by-other">
-                      <!-- Use the class "pull-right" in avatar -->
-                      <div class="avatar pull-right">
-                        <img src="img/user22.png" alt="" />
-                      </div>
-
-                      <div class="chat-content">
-                        <!-- In the chat meta, first include "time" then "name" -->
-                        <div class="chat-meta">3 hours ago <span class="pull-right">Jenifer Smith</span></div>
-                        Vivamus diam elit diam, consectetur fconsectetur dapibus adipiscing elit.
-                        <div class="clearfix"></div>
-                      </div>
-                    </li>
-
-                    <li class="by-me">
-                      <div class="avatar pull-left">
-                        <img src="img/user.jpg" alt="" />
-                      </div>
-
-                      <div class="chat-content">
-                        <div class="chat-meta">John Smith <span class="pull-right">4 hours ago</span></div>
-                        Vivamus diam elit diam, consectetur fermentum sed dapibus eget, Vivamus consectetur dapibus adipiscing elit.
-                        <div class="clearfix"></div>
-                      </div>
-                    </li>
-
-                    <li class="by-other">
-                      <!-- Use the class "pull-right" in avatar -->
-                      <div class="avatar pull-right">
-                        <img src="img/user22.png" alt="" />
-                      </div>
-
-                      <div class="chat-content">
-                        <!-- In the chat meta, first include "time" then "name" -->
-                        <div class="chat-meta">3 hours ago <span class="pull-right">Jenifer Smith</span></div>
-                        Vivamus diam elit diam, consectetur fermentum sed dapibus eget, Vivamus consectetur dapibus adipiscing elit.
-                        <div class="clearfix"></div>
-                      </div>
-                    </li>
-
-                  </ul>
-
-                </div>
-                <!-- Widget footer -->
-                <div class="widget-foot">
-
-                  <form class="form-inline">
-                    <div class="form-group">
-                      <input type="text" class="form-control" placeholder="Type your message here...">
-                    </div>
-                    <button type="submit" class="btn btn-info">Send</button>
-                  </form>
-
-
-                </div>
-              </div>
-
-
-            </div>
-          </div>
-
-          <div class="col-lg-8">
-            <!--Project Activity start-->
-            <section class="panel">
-              <div class="panel-body progress-panel">
-                <div class="row">
-                  <div class="col-lg-8 task-progress pull-left">
-                    <h1>To Do Everyday</h1>
-                  </div>
-                  <div class="col-lg-4">
-                    <span class="profile-ava pull-right">
-                                        <img alt="" class="simple" src="img/avatar1_small.jpg">
-                                        Jenifer smith
-                                </span>
-                  </div>
-                </div>
-              </div>
-              <table class="table table-hover personal-task">
-                <tbody>
-                  <tr>
-                    <td>Today</td>
-                    <td>
-                      web design
-                    </td>
-                    <td>
-                      <span class="badge bg-important">Upload</span>
-                    </td>
-                    <td>
-                      <span class="profile-ava">
-                                        <img alt="" class="simple" src="img/avatar1_small.jpg">
-                                    </span>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Yesterday</td>
-                    <td>
-                      Project Design Task
-                    </td>
-                    <td>
-                      <span class="badge bg-success">Task</span>
-                    </td>
-                    <td>
-                      <div id="work-progress2"></div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>21-10-14</td>
-                    <td>
-                      Generate Invoice
-                    </td>
-                    <td>
-                      <span class="badge bg-success">Task</span>
-                    </td>
-                    <td>
-                      <div id="work-progress3"></div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>22-10-14</td>
-                    <td>
-                      Project Testing
-                    </td>
-                    <td>
-                      <span class="badge bg-primary">To-Do</span>
-                    </td>
-                    <td>
-                      <span class="profile-ava">
-                                        <img alt="" class="simple" src="img/avatar1_small.jpg">
-                                      </span>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>24-10-14</td>
-                    <td>
-                      Project Release Date
-                    </td>
-                    <td>
-                      <span class="badge bg-info">Milestone</span>
-                    </td>
-                    <td>
-                      <div id="work-progress4"></div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>28-10-14</td>
-                    <td>
-                      Project Release Date
-                    </td>
-                    <td>
-                      <span class="badge bg-primary">To-Do</span>
-                    </td>
-                    <td>
-                      <div id="work-progress5"></div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Last week</td>
-                    <td>
-                      Project Release Date
-                    </td>
-                    <td>
-                      <span class="badge bg-primary">To-Do</span>
-                    </td>
-                    <td>
-                      <div id="work-progress1"></div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>last month</td>
-                    <td>
-                      Project Release Date
-                    </td>
-                    <td>
-                      <span class="badge bg-success">To-Do</span>
-                    </td>
-                    <td>
-                      <span class="profile-ava">
-                                        <img alt="" class="simple" src="img/avatar1_small.jpg">
-                                      </span>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </section>
-            <!--Project Activity end-->
-          </div>
         </div><br><br>
-
-        <div class="row">
-          <div class="col-md-6 portlets">
-            <div class="panel panel-default">
-              <div class="panel-heading">
-                <h2><strong>Calendar</strong></h2>
-                <div class="panel-actions">
-                  <a href="#" class="wminimize"><i class="fa fa-chevron-up"></i></a>
-                  <a href="#" class="wclose"><i class="fa fa-times"></i></a>
-                </div>
-
-              </div><br><br><br>
-              <div class="panel-body">
-                <!-- Widget content -->
-
-                <!-- Below line produces calendar. I am using FullCalendar plugin. -->
-                <div id="calendar"></div>
-
-              </div>
-            </div>
-
-          </div>
-
-          <div class="col-md-6 portlets">
-            <div class="panel panel-default">
-              <div class="panel-heading">
-                <div class="pull-left">Quick Post</div>
-                <div class="widget-icons pull-right">
-                  <a href="#" class="wminimize"><i class="fa fa-chevron-up"></i></a>
-                  <a href="#" class="wclose"><i class="fa fa-times"></i></a>
-                </div>
-                <div class="clearfix"></div>
-              </div>
-              <div class="panel-body">
-                <div class="padd">
-
-                  <div class="form quick-post">
-                    <!-- Edit profile form (not working)-->
-                    <form class="form-horizontal">
-                      <!-- Title -->
-                      <div class="form-group">
-                        <label class="control-label col-lg-2" for="title">Title</label>
-                        <div class="col-lg-10">
-                          <input type="text" class="form-control" id="title">
-                        </div>
-                      </div>
-                      <!-- Content -->
-                      <div class="form-group">
-                        <label class="control-label col-lg-2" for="content">Content</label>
-                        <div class="col-lg-10">
-                          <textarea class="form-control" id="content"></textarea>
-                        </div>
-                      </div>
-                      <!-- Cateogry -->
-                      <div class="form-group">
-                        <label class="control-label col-lg-2">Category</label>
-                        <div class="col-lg-10">
-                          <select class="form-control">
-                                                  <option value="">- Choose Cateogry -</option>
-                                                  <option value="1">General</option>
-                                                  <option value="2">News</option>
-                                                  <option value="3">Media</option>
-                                                  <option value="4">Funny</option>
-                                                </select>
-                        </div>
-                      </div>
-                      <!-- Tags -->
-                      <div class="form-group">
-                        <label class="control-label col-lg-2" for="tags">Tags</label>
-                        <div class="col-lg-10">
-                          <input type="text" class="form-control" id="tags">
-                        </div>
-                      </div>
-
-                      <!-- Buttons -->
-                      <div class="form-group">
-                        <!-- Buttons -->
-                        <div class="col-lg-offset-2 col-lg-9">
-                          <button type="submit" class="btn btn-primary">Publish</button>
-                          <button type="submit" class="btn btn-danger">Save Draft</button>
-                          <button type="reset" class="btn btn-default">Reset</button>
-                        </div>
-                      </div>
-                    </form>
-                  </div>
-
-
-                </div>
-                <div class="widget-foot">
-                  <!-- Footer goes here -->
-                </div>
-              </div>
-            </div>
-
-          </div>
-
-        </div>
         <!-- project team & activity end -->
 
       </section>
-      <div class="text-right">
-        <div class="credits">
-          <!--
-            All the links in the footer should remain intact.
-            You can delete the links only if you purchased the pro version.
-            Licensing information: https://bootstrapmade.com/license/
-            Purchase the pro version form: https://bootstrapmade.com/buy/?theme=NiceAdmin
-          -->
-          Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
-        </div>
-      </div>
     </section>
     <!--main content end-->
   </section>
@@ -1089,7 +738,7 @@
     <script src="js/sparklines.js"></script>
     <script src="js/charts.js"></script>
     <script src="js/jquery.slimscroll.min.js"></script>
-    <script src="../js/jquery.js"></script>
+  
     <script>
       //knob
      
